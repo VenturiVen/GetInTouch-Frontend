@@ -12,9 +12,9 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 |----|----|
 [Aron Calvert](https://github.com/AronCalvert) | Backend
 [Leo O'Shea](https://github.com/VenturiVen) | Frontend, Wiki
-Eric Lonergan | Backend
-Luke Minogue | Backend
-Raid Mouras | Frontend
+[Eric Lonergan](https://github.com/Eric1642) | Backend
+[Luke Minogue](https://github.com/LM-22347526) | Backend
+[Raid Mouras](https://github.com/RaidMouras) | Frontend
 
 ## Pre-Requisites
 [To-Do]
