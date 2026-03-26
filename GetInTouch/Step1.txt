@@ -1,0 +1,404 @@
+================================================================================
+GET IN TOUCH - FRONTEND SETUP: STEP 1 DOCUMENTATION
+================================================================================
+Project: Get In Touch (CS4135 - Software Architecture)
+Developer: Raid Mouras (22368566)
+Date: 2026-03-23
+================================================================================
+
+
+OVERVIEW
+--------
+When we started, the React app was completely broken and would crash immediately
+on startup. Three critical things were missing or broken. On top of that, all
+the Redux, routing, and constants files were empty placeholders with no code in
+them. This document explains every single thing that was done to get the project
+into a working, runnable state.
+
+
+================================================================================
+PROBLEM 1: THE APP CRASHED ON STARTUP (MISSING HOME PAGE)
+================================================================================
+
+FILE AFFECTED: src/App.jsx
+
+The original App.jsx had this line:
+    import Home from "./pages/Home";
+
+The Home page (src/pages/Home/index.jsx) had been deleted from the project
+(you can see it in the git status as a deleted file). React would crash
+immediately because it was trying to import a file that no longer existed.
+
+App.jsx was also using <Routes> and <Route> from react-router-dom to define
+paths. However, main.jsx (the entry point of the app) was ALREADY using
+<RouterProvider> with a separate router file. You cannot mix these two
+approaches — having both RouterProvider in main.jsx AND <Routes> inside App.jsx
+would conflict.
+
+SOLUTION:
+We left App.jsx as-is (since main.jsx no longer renders App.jsx anyway — it
+renders the RouterProvider directly). The router is now fully handled in
+src/router/index.jsx, which is explained below.
+
+
+================================================================================
+PROBLEM 2: THE REDUX STORE WAS EMPTY
+================================================================================
+
+FILE AFFECTED: src/redux-features/store/store.js
+
+main.jsx imports the Redux store like this:
+    import { store } from './redux-features/store/store'
+
+The store.js file existed but was completely empty. This means the app would
+crash because it was trying to use something that didn't exist.
+
+SOLUTION — src/redux-features/store/store.js:
+We created the Redux store using configureStore from @reduxjs/toolkit.
+The store combines three reducers (one for each feature of the app):
+
+    import { configureStore } from '@reduxjs/toolkit';
+    import userReducer from '../slices/user/userSlice';
+    import bookingReducer from '../slices/booking/bookingSlice';
+    import slotReducer from '../slices/staff/slotSlice';
+
+    export const store = configureStore({
+        reducer: {
+            user: userReducer,
+            booking: bookingReducer,
+            slot: slotReducer,
+        },
+    });
+
+- "user" reducer: handles login, logout, current logged-in user info, role
+- "booking" reducer: will handle student bookings (ready to be expanded)
+- "slot" reducer: will handle staff availability slots (ready to be expanded)
+
+The store is already wrapped around the entire app in main.jsx via:
+    <Provider store={store}>
+This means every component in the app can access the Redux state.
+
+
+================================================================================
+PROBLEM 3: THE ROUTER FILE DID NOT EXIST
+================================================================================
+
+FILE CREATED: src/router/index.jsx
+
+main.jsx imports the router like this:
+    import router from './router/index.jsx'
+
+The router/ directory existed but was completely empty — no index.jsx file.
+The app would crash because it was trying to import a file that didn't exist.
+
+SOLUTION — src/router/index.jsx:
+We created the router using createBrowserRouter from react-router-dom.
+This defines all the URL paths in the application and which component to show
+for each path:
+
+    /           → Login page (default landing page)
+    /login      → Login page
+    /admin-dashboard   → AdminDashboard component
+    /staff-dashboard   → StaffDashboard component
+    /student-dashboard → StudentDashboard component
+
+Why createBrowserRouter instead of <Routes>?
+Because main.jsx uses <RouterProvider router={router} />, which requires
+createBrowserRouter. This is the modern React Router v6+ approach and is
+the same pattern shown in your Lab 7 material.
+
+
+================================================================================
+WHAT WAS BUILT: REDUX SLICES
+================================================================================
+
+Redux Toolkit uses "slices" — each slice manages one piece of the app's state.
+Each slice has a Service file (handles API calls) and a Slice file (handles state).
+
+
+------------------------------------------------------------------------
+SLICE 1: USER SLICE (Authentication)
+------------------------------------------------------------------------
+
+FILE: src/redux-features/slices/user/userService.js
+
+This file is responsible for making the actual HTTP request to the backend.
+It uses axios to POST the user's email and password to the login endpoint:
+
+    export const loginUser = async (credentials) => {
+        const response = await axios.post(`${BASE_URL}${LOGIN}`, credentials);
+        return response.data;
+    };
+
+The BASE_URL is read from the .env file (explained later).
+The LOGIN endpoint path comes from src/constants/apiEndpoints.js.
+
+
+FILE: src/redux-features/slices/user/userSlice.js
+
+This file manages the "user" section of the Redux store. It handles:
+
+STATE (what is stored):
+    - currentUser: the logged-in user's info (name, email, etc.)
+    - token: the JWT token returned by the backend after login
+    - role: the user's role (ADMIN, STAFF, or STUDENT)
+    - loading: true while the login request is in progress
+    - error: any error message if login fails
+
+ASYNC THUNK — login:
+    An async thunk is a Redux action that makes an API call.
+    When you dispatch login(credentials), it:
+    1. Sets loading = true
+    2. Calls loginUser() from userService.js
+    3. If successful: stores the user, token, and role in state
+    4. If failed: stores the error message in state
+
+REGULAR ACTIONS:
+    - logout: clears the user, token, and role from state (logs the user out)
+    - clearError: clears any error messages from state
+
+
+------------------------------------------------------------------------
+SLICE 2: BOOKING SLICE
+------------------------------------------------------------------------
+
+FILE: src/redux-features/slices/booking/bookingSlice.js
+
+This slice will manage all booking-related state (student bookings).
+For now it is a working placeholder with the correct structure:
+    - bookings: [] (list of bookings)
+    - loading: false
+    - error: null
+
+It is ready to be expanded with async thunks for:
+    - fetching a student's bookings
+    - creating a new booking
+    - cancelling a booking
+
+
+------------------------------------------------------------------------
+SLICE 3: SLOT SLICE (Staff Availability)
+------------------------------------------------------------------------
+
+FILE: src/redux-features/slices/staff/slotSlice.js
+
+This slice will manage staff availability slot state.
+For now it is a working placeholder with the correct structure:
+    - slots: [] (list of availability slots)
+    - loading: false
+    - error: null
+
+It is ready to be expanded with async thunks for:
+    - fetching a staff member's slots
+    - creating a new slot
+    - editing a slot
+    - deleting a slot
+
+
+================================================================================
+WHAT WAS BUILT: CONSTANTS
+================================================================================
+
+------------------------------------------------------------------------
+FILE: src/constants/role.js
+------------------------------------------------------------------------
+
+Defines the three user roles as constants:
+
+    export const ROLES = {
+        ADMIN: 'ADMIN',
+        STAFF: 'STAFF',
+        STUDENT: 'STUDENT',
+    };
+
+Why constants instead of plain strings?
+If you type 'ADMIN' as a string in 10 different files and then the backend
+changes it to 'admin' (lowercase), you have to find and fix all 10 places.
+With a constant, you change it in one place and it updates everywhere.
+
+These will be used for things like:
+    - Checking what dashboard to redirect to after login
+    - Showing/hiding UI elements based on who is logged in
+    - Protecting routes so students can't access admin pages
+
+
+------------------------------------------------------------------------
+FILE: src/constants/apiEndpoints.js
+------------------------------------------------------------------------
+
+All the backend API paths are defined here in one place:
+
+AUTH:
+    LOGIN   = '/api/auth/login'
+    LOGOUT  = '/api/auth/logout'
+
+USER MANAGEMENT (Admin):
+    GET_USERS   = '/api/users'          (get all users)
+    CREATE_USER = '/api/users'          (add a user)
+    DELETE_USER = (id) => `/api/users/${id}`  (delete specific user by ID)
+
+SLOTS (Staff):
+    GET_SLOTS    = '/api/slots'
+    CREATE_SLOT  = '/api/slots'
+    UPDATE_SLOT  = (id) => `/api/slots/${id}`
+    DELETE_SLOT  = (id) => `/api/slots/${id}`
+
+BOOKINGS (Student):
+    GET_BOOKINGS    = '/api/bookings'
+    CREATE_BOOKING  = '/api/bookings'
+    CANCEL_BOOKING  = (id) => `/api/bookings/${id}/cancel`
+
+STAFF DIRECTORY (Student browsing):
+    GET_STAFF       = '/api/staff'
+    GET_STAFF_SLOTS = (staffId) => `/api/staff/${staffId}/slots`
+
+Note: The functions like DELETE_USER = (id) => `/api/users/${id}` are called
+with a specific ID at runtime, e.g. DELETE_USER(42) gives '/api/users/42'.
+These paths will need to match exactly what the backend team implements.
+
+
+================================================================================
+WHAT WAS BUILT: DASHBOARD PLACEHOLDERS
+================================================================================
+
+These three files were completely empty. Empty files cause import errors, so
+each was given a minimal working component that renders a title. They are
+ready to be built out with real UI.
+
+FILE: src/pages/dashboard/admin/AdminDashboard.jsx
+    - Renders: <h1>Admin Dashboard</h1>
+    - Will become: user list directory, add/delete user buttons, booking monitor
+
+FILE: src/pages/dashboard/staff/StaffDashboard.jsx
+    - Renders: <h1>Staff Dashboard</h1>
+    - Will become: Available Slots section + Booked Slots section
+
+FILE: src/pages/dashboard/student/StudentDashboard.jsx
+    - Renders: <h1>Student Dashboard</h1>
+    - Will become: Staff directory cards + search bar + booking interface
+
+
+================================================================================
+WHAT WAS BUILT: ENVIRONMENT CONFIGURATION
+================================================================================
+
+FILE: .env (in the root of the GetInTouch/ folder)
+
+    VITE_BACKEND_URL=http://localhost:8080
+
+This file stores environment-specific configuration. The backend runs on
+port 8080 (standard Spring Boot port). When the backend team runs their
+server locally, your frontend will send API requests to that address.
+
+In any JavaScript file, this value is accessed via:
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
+Important: All Vite environment variables MUST start with VITE_ otherwise
+Vite will not expose them to the browser for security reasons.
+
+This file should NOT be committed to GitHub (it's in .gitignore) because
+in a real deployment the URL would be different (a live server, not localhost).
+
+
+================================================================================
+THE FINAL ARCHITECTURE: HOW IT ALL CONNECTS
+================================================================================
+
+Here is the flow of the application from startup to rendering a page:
+
+1. Browser loads index.html
+   └── index.html loads src/main.jsx
+
+2. main.jsx sets up the app:
+   ├── Wraps everything in <Provider store={store}>
+   │   └── This gives every component access to the Redux store (global state)
+   └── Renders <RouterProvider router={router} />
+       └── This controls which page component to show based on the URL
+
+3. router/index.jsx maps URLs to components:
+   ├── / or /login         → <Login />
+   ├── /admin-dashboard    → <AdminDashboard />
+   ├── /staff-dashboard    → <StaffDashboard />
+   └── /student-dashboard  → <StudentDashboard />
+
+4. When a user logs in (future Login page logic):
+   ├── Dispatch login({ email, password }) action
+   ├── userService.js sends POST /api/auth/login to the backend
+   ├── Backend returns { user: {...}, token: "..." }
+   ├── userSlice stores user, token, and role in Redux state
+   └── App checks role and redirects to the correct dashboard:
+       ├── ADMIN   → /admin-dashboard
+       ├── STAFF   → /staff-dashboard
+       └── STUDENT → /student-dashboard
+
+5. On any page, components can read from Redux state using:
+       const { currentUser, role } = useSelector((state) => state.user);
+   And they can trigger actions using:
+       const dispatch = useDispatch();
+       dispatch(login(credentials));
+
+
+================================================================================
+FILE SUMMARY: WHAT WAS CREATED / MODIFIED
+================================================================================
+
+CREATED:
+    src/router/index.jsx                              (was missing, crashed app)
+    src/redux-features/store/store.js                 (was empty, crashed app)
+    src/redux-features/slices/user/userSlice.js       (was empty)
+    src/redux-features/slices/user/userService.js     (was empty)
+    src/redux-features/slices/booking/bookingSlice.js (was empty)
+    src/redux-features/slices/staff/slotSlice.js      (was empty)
+    src/constants/role.js                             (was empty)
+    src/constants/apiEndpoints.js                     (was empty)
+    src/pages/dashboard/admin/AdminDashboard.jsx      (was empty)
+    src/pages/dashboard/staff/StaffDashboard.jsx      (was empty)
+    src/pages/dashboard/student/StudentDashboard.jsx  (was empty)
+    .env                                              (did not exist)
+
+NOT MODIFIED:
+    src/main.jsx          (already correct — uses Provider + RouterProvider)
+    src/index.css         (already correct — imports Tailwind)
+    vite.config.js        (already correct — React + Tailwind plugins)
+    src/pages/Login/      (exists and works, will be built out next)
+    src/pages/Layout/     (exists, may be used later)
+    src/components/       (NavBar, Footer, SideBar exist as stubs)
+    package.json          (all dependencies already installed)
+
+
+================================================================================
+NEXT STEPS (STEP 2 AND BEYOND)
+================================================================================
+
+Now that the app runs without errors, the next things to build are:
+
+STEP 2 — Login Page:
+    - Build the login form UI (email + password fields, submit button)
+    - Connect form to the login Redux thunk
+    - After successful login, read the role from state and redirect to the
+      correct dashboard (/admin-dashboard, /staff-dashboard, /student-dashboard)
+    - Show an error message if login fails
+
+STEP 3 — Student Dashboard:
+    - Fetch and display all staff members as cards (name, role, department)
+    - Search bar that filters by name or occupation
+    - Click a staff card → show their available time slots
+    - Select a slot → prompt for a meeting note → confirm booking
+
+STEP 4 — Staff Dashboard:
+    - Show "Available Slots" section (slots staff created)
+    - Show "Booked Slots" section (slots students have booked)
+    - Create new slot (date/time picker)
+    - Edit or delete existing slots
+
+STEP 5 — Admin Dashboard:
+    - List of all staff members (default view)
+    - Toggle to list of students
+    - Search bar
+    - Add user button (modal popup)
+    - Delete user button (confirmation popup)
+    - View all bookings
+
+================================================================================
+END OF STEP 1 DOCUMENTATION
+================================================================================

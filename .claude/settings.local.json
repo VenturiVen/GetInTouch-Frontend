@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Read(//c/Users/Raid/.claude/projects/c--Users-Raid-Documents-Salim-frontend-GetInTouch-Frontend/**)",
+      "Read(//c/Users/Raid/.claude/projects/c--Users-Raid-Documents-Salim-frontend-GetInTouch-Frontend/memory/**)"
+    ]
+  }
+}
