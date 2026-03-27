@@ -2,6 +2,7 @@
 # Misc
 .env
 .claude
+.txt
 
 # Logs
 logs
