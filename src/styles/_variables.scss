@@ -1,0 +1,71 @@
+// this is a file containing all the styles we have agreed on
+// this makes setting colours, fonts, etc is made easier and more consistent
+// sorry for using 'color' instead of 'colour' it makes it more consistent with variable names...
+
+// import example in an scss file: '@import './variables'
+
+// greens (UL branding kinda)
+$color-accent-100: #e6f4ea;
+$color-accent-300: #6fdc8c;
+$color-accent-500: #048524;
+$color-accent-700: #03691d;
+$color-accent-900: #024d15;
+
+// background colours dark mode
+$color-background-primary: #131513;
+$color-background-secondary: #1c1f1c;
+$color-background-tertiary: #262a26;
+
+// text colours
+$color-text-primary: $color-accent-100;
+$color-text-secondary: #b5b5b5;
+
+$color-text-accent: $color-accent-500;
+
+// links
+$color-link: $color-accent-300;
+$color-link-hover: $color-accent-500;
+$color-link-active: $color-accent-700;
+
+// buttons
+$color-button-primary: $color-accent-500;
+$color-button-primary-hover: $color-accent-700;
+$color-button-primary-active: $color-accent-900;
+$color-button-text: #ffffff;
+
+$color-button-secondary: #2e332e;
+$color-button-secondary-hover: #3a403a;
+$color-button-secondary-text: $color-text-primary;
+
+// status colors
+$color-success: #16a34a;
+$color-warning: #eab308;
+$color-error: #dc2626;
+$color-info: #2563eb;
+
+// spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// fonts
+$font-family-base: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.5rem;
+$font-size-xl: 2rem;
+$font-size-xxl: 3rem;
+
+// border
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 16px;
+
+// transitions
+$transition-fast: 0.2s ease;
+$transition-medium: 0.3s ease;
+$transition-slow: 0.5s ease;

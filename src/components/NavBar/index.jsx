@@ -5,6 +5,10 @@ import './index.scss';
 const NavBar = () => {
     return (
         <div className="nav-bar">
+            <div className="brand">
+                {/* replace with UL logo maybe? couldnt find a transparent png */}
+                <h1>Get In Touch</h1>
+            </div>
 
             <div className="nav-container">
                 <nav>
@@ -15,9 +19,15 @@ const NavBar = () => {
                     >
                         Home
                     </NavLink>
-
                 </nav>
-
+                <nav>
+                    <NavLink
+                        to="/dashboard"
+                        className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                        Dashboard
+                    </NavLink>
+                </nav>
                 <nav>
                     <NavLink
                         to="/login"
@@ -25,7 +35,6 @@ const NavBar = () => {
                     >
                         Login
                     </NavLink>
-
                 </nav>
             </div>
         </div>

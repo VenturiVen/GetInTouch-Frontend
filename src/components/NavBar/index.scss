@@ -1,22 +1,29 @@
+@use '../../styles/variables' as v;
+
 .nav-bar {
-    background: none;
     position: fixed;
     top: 0;
-    right: 0;
     width: 100%;
-    height: 15%;
-    z-index: 1000;
-    margin-top: 1rem;
-
+    height: 8rem;
     display: flex;
-    align-items: center;
-    justify-content: right;
+    z-index: 100;
+    background-color: v.$color-background-secondary;
+    justify-content: space-between;
 
+    .brand {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        color: v.$color-accent-500;
+        margin-left: 4rem;
+    }
+    
     .nav-container {
+        margin-top: 1rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 20%;
+        width: 30%;
         margin-right: 4rem;
     }
 
@@ -24,14 +31,19 @@
         a {
             font-weight: bold;
             font-size: 2rem;
+            color: v.$color-text-primary;
             text-decoration: none;
 
             i {
-                transition: all 0.3s ease;
+                transition: all v.$transition-medium;
             }
 
             &:hover {
-                color: red;
+                color: v.$color-text-secondary;
+            }
+
+            &:active {
+                color: v.$color-link-active;
             }
         }
     }
