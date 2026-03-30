@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../presentation/pages/Layout";
-import Home from "../presentation/pages/Home";
-import Login from "../presentation/pages/Login";
-import AdminDashboard from "../presentation/pages/dashboard/admin";
-import StaffDashboard from "../presentation/pages/dashboard/staff"
-import StudentDashboard from "../presentation/pages/dashboard/student";
+import Layout from "../ui/pages/Layout";
+import Home from "../ui/pages/Home";
+import Login from "../ui/pages/Login";
+import AdminDashboard from "../ui/pages/dashboard/admin";
+import StaffDashboard from "../ui/pages/dashboard/staff"
+import StudentDashboard from "../ui/pages/dashboard/student";
 
 const router = createBrowserRouter([
     {
