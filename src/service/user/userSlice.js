@@ -1,14 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser } from './userService';
 
+// runs async API call
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
     try {
         const data = await loginUser(credentials);
         return data;
     } catch (error) {
-        return rejectWithValue(error.response?.data?.message || 'Login failed');
+        return rejectWithValue(
+            error?.response?.data?.message || error.message || 'Login failed'
+        );
     }
 });
+
+// #TO-DO: Implement persistent token and user using localstorage
 
 const userSlice = createSlice({
     name: 'user',
@@ -24,6 +29,7 @@ const userSlice = createSlice({
             state.currentUser = null;
             state.token = null;
             state.role = null;
+            state.loading = false;
         },
         clearError: (state) => {
             state.error = null;
@@ -37,6 +43,7 @@ const userSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
+                const { user, token } = action.payload;
                 state.currentUser = action.payload.user;
                 state.token = action.payload.token;
                 state.role = action.payload.user?.role;
