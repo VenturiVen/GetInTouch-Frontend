@@ -24,6 +24,21 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 2. Run 'npm install'
 3. Run 'npm run dev' in the terminal
 
-##
+## Project Structure
+This project follows the structure of a layered architecture. Directories with a layer name contains code that performs actions following the purpose of the layer.
+```
+/src
+    # layers
+    /ui             # ui layer: aka presentation or API layer, contains React components
+    /service        # service layer: aka business layer, react hooks and service logic
+    /repo           # repository layer: data abstraction (logic to get data, will call database layer)
+    /infra          # infrastructure layer: API calls
+
+    # application
+    /app            # app setup
+    /assets         # misc static files (e.g., images, branding, fonts)
+    /styles         # styles that are applied globally, can be called globally
+    main.jsx        # entry point
+```
 
 © 2026 Aron Calvert, Leo O'Shea, Eric Lonergan, Luke Minogue, & Raid Mouras. All rights reserved.
