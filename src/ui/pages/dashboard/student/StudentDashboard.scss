@@ -1,0 +1,56 @@
+@use '../../../../styles/variables' as v;
+
+.student-dashboard {
+    padding: v.$spacing-xl;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: v.$spacing-xl;
+        gap: v.$spacing-lg;
+        flex-wrap: wrap;
+    }
+
+    &__title {
+        font-size: v.$font-size-xl;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__search {
+        flex: 1;
+        max-width: 400px;
+        padding: v.$spacing-sm v.$spacing-md;
+        border-radius: v.$radius-md;
+        border: 1px solid v.$color-background-tertiary;
+        background-color: v.$color-background-secondary;
+        color: v.$color-text-primary;
+        font-size: v.$font-size-sm;
+        transition: border-color v.$transition-fast;
+
+        &::placeholder {
+            color: v.$color-text-secondary;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: v.$color-accent-500;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: v.$spacing-lg;
+    }
+
+    &__empty {
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-md;
+        text-align: center;
+        margin-top: v.$spacing-xl;
+    }
+}

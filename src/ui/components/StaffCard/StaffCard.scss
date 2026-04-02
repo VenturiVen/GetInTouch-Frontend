@@ -1,0 +1,60 @@
+@use '../../../styles/variables' as v;
+
+.staff-card {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-background-tertiary;
+    border-radius: v.$radius-md;
+    padding: v.$spacing-lg;
+    cursor: pointer;
+    transition: border-color v.$transition-fast, transform v.$transition-fast;
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-md;
+
+    &:hover {
+        border-color: v.$color-accent-500;
+        transform: translateY(-2px);
+    }
+
+    &__avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: v.$color-accent-700;
+        color: v.$color-button-text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    &__name {
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__department {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        margin: v.$spacing-xs 0 0 0;
+    }
+
+    &__roles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: v.$spacing-xs;
+        margin-top: v.$spacing-sm;
+    }
+
+    &__role-tag {
+        font-size: v.$font-size-xs;
+        background-color: v.$color-background-tertiary;
+        color: v.$color-text-secondary;
+        padding: 2px v.$spacing-sm;
+        border-radius: v.$radius-sm;
+    }
+}

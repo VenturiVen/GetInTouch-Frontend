@@ -1,0 +1,121 @@
+@use '../../../styles/variables' as v;
+
+.availability-modal {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-background-tertiary;
+    border-radius: v.$radius-lg;
+    padding: v.$spacing-xl;
+    width: 100%;
+    max-width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-lg;
+
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: v.$spacing-lg;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    &__name {
+        font-size: v.$font-size-lg;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__department {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        margin: v.$spacing-xs 0 0 0;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-lg;
+        cursor: pointer;
+        padding: v.$spacing-xs;
+        line-height: 1;
+        transition: color v.$transition-fast;
+
+        &:hover {
+            color: v.$color-text-primary;
+        }
+    }
+
+    &__subtitle {
+        font-size: v.$font-size-md;
+        color: v.$color-text-secondary;
+        margin: 0;
+        padding-bottom: v.$spacing-sm;
+        border-bottom: 1px solid v.$color-background-tertiary;
+    }
+
+    &__slots {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-sm;
+    }
+
+    &__slot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: v.$color-background-tertiary;
+        border-radius: v.$radius-md;
+        padding: v.$spacing-md;
+        gap: v.$spacing-md;
+    }
+
+    &__slot-info {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+    }
+
+    &__slot-date {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-primary;
+        font-weight: 500;
+    }
+
+    &__slot-time {
+        font-size: v.$font-size-sm;
+        color: v.$color-accent-300;
+    }
+
+    &__book-btn {
+        background-color: v.$color-button-primary;
+        color: v.$color-button-text;
+        border: none;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-sm v.$spacing-md;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color v.$transition-fast;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: v.$color-button-primary-hover;
+        }
+
+        &:active {
+            background-color: v.$color-button-primary-active;
+        }
+    }
+}

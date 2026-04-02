@@ -4,7 +4,7 @@ import Home from "../ui/pages/Home";
 import Login from "../ui/pages/Login";
 import AdminDashboard from "../ui/pages/dashboard/admin";
 import StaffDashboard from "../ui/pages/dashboard/staff"
-import StudentDashboard from "../ui/pages/dashboard/student";
+import StudentDashboard from "../ui/pages/dashboard/student/StudentDashboard";
 
 const router = createBrowserRouter([
     {
