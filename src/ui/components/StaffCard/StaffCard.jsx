@@ -1,10 +1,10 @@
-import './index.scss';
+import './StaffCard.scss';
 
 const StaffCard = ({ staff, onClick }) => {
     const initials = staff.name
         .split(' ')
         .map(n => n[0])
-        .slice(0, 2)
+        .slice(1, 3)
         .join('');
 
     return (
