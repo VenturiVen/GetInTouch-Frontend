@@ -22,7 +22,7 @@ const NavBar = () => {
                 </nav>
                 <nav>
                     <NavLink
-                        to="/dashboard"
+                        to="/dashboard/admin"
                         className={({ isActive }) => (isActive ? "active" : "")}
                     >
                         Dashboard

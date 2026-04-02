@@ -13,10 +13,9 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Home /> },
             { path: "login", element: <Login /> },
-            { path: "dashboard", element: <AdminDashboard /> }, // temporary. add check for user type
-            { path: "admindashboard", element: <AdminDashboard /> },
-            { path: "staffdashboard", element: <StaffDashboard /> },
-            { path: "studentdashboard", element: <StudentDashboard /> }
+            { path: "dashboard/admin", element: <AdminDashboard /> },
+            { path: "dashboard/staff", element: <StaffDashboard /> },
+            { path: "dashboard/student", element: <StudentDashboard /> }
         ],
     }
 ]);

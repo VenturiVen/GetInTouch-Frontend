@@ -29,21 +29,20 @@
 
     nav {
         a {
+            display: inline-block;
             font-weight: bold;
             font-size: 2rem;
             color: v.$color-text-primary;
             text-decoration: none;
-
-            i {
-                transition: all v.$transition-medium;
-            }
+            transition: transform v.$transition-fast, color v.$transition-medium;
 
             &:hover {
                 color: v.$color-text-secondary;
+                transform: translateY(-1px);
             }
 
             &:active {
-                color: v.$color-link-active;
+                transform: scale(0.95);
             }
         }
     }
