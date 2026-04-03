@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
+import BookingModal from '../../../components/BookingModal/BookingModal';
 import './StudentDashboard.scss';
 
 // TODO: replace with API call to GET /api/staff when backend is ready
@@ -16,6 +17,7 @@ const mockStaff = [
 const StudentDashboard = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStaff, setSelectedStaff] = useState(null);
+    const [bookingData, setBookingData] = useState(null);
 
     const filteredStaff = mockStaff.filter(staff => {
         const term = searchTerm.toLowerCase();
@@ -31,8 +33,13 @@ const StudentDashboard = () => {
     };
 
     const handleBook = (staff, slot) => {
-        // TODO: open booking modal 
-        console.log('Booking slot:', slot, 'with', staff.name);
+        setBookingData({ staff, slot });
+    };
+
+    const handleConfirm = (booking) => {
+        console.log('Booking confirmed:', booking);
+        setBookingData(null);
+        setSelectedStaff(null);
     };
 
     return (
@@ -64,6 +71,13 @@ const StudentDashboard = () => {
                 staff={selectedStaff}
                 onClose={() => setSelectedStaff(null)}
                 onBook={handleBook}
+            />
+
+            <BookingModal
+                staff={bookingData?.staff}
+                slot={bookingData?.slot}
+                onClose={() => setBookingData(null)}
+                onConfirm={handleConfirm}
             />
         </>
     );
