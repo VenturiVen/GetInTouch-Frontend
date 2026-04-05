@@ -1,0 +1,144 @@
+@use '../../../styles/variables' as v;
+
+.create-slot-modal {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-background-tertiary;
+    border-radius: v.$radius-lg;
+    padding: v.$spacing-xl;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-lg;
+
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: v.$spacing-lg;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__title {
+        font-size: v.$font-size-lg;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-lg;
+        cursor: pointer;
+        padding: v.$spacing-xs;
+        line-height: 1;
+        transition: color v.$transition-fast;
+
+        &:hover {
+            color: v.$color-text-primary;
+        }
+    }
+
+    &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-md;
+    }
+
+    &__row {
+        display: flex;
+        gap: v.$spacing-md;
+
+        .create-slot-modal__field {
+            flex: 1;
+        }
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+    }
+
+    &__label {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+    }
+
+    &__input {
+        background-color: v.$color-background-tertiary;
+        border: 1px solid v.$color-background-tertiary;
+        border-radius: v.$radius-md;
+        color: v.$color-text-primary;
+        font-size: v.$font-size-sm;
+        padding: v.$spacing-sm v.$spacing-md;
+        transition: border-color v.$transition-fast;
+        width: 100%;
+        box-sizing: border-box;
+        color-scheme: dark;
+
+        &:focus {
+            outline: none;
+            border-color: v.$color-accent-500;
+        }
+    }
+
+    &__error {
+        font-size: v.$font-size-sm;
+        color: v.$color-error;
+        margin: 0;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: v.$spacing-md;
+    }
+
+    &__cancel-btn {
+        background-color: v.$color-button-secondary;
+        color: v.$color-button-secondary-text;
+        border: none;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-sm v.$spacing-lg;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color v.$transition-fast;
+
+        &:hover {
+            background-color: v.$color-button-secondary-hover;
+        }
+    }
+
+    &__create-btn {
+        background-color: v.$color-button-primary;
+        color: v.$color-button-text;
+        border: none;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-sm v.$spacing-lg;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color v.$transition-fast;
+
+        &:hover:not(:disabled) {
+            background-color: v.$color-button-primary-hover;
+        }
+
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+}

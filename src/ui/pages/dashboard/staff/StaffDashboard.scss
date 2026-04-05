@@ -1,0 +1,54 @@
+@use '../../../../styles/variables' as v;
+
+.staff-dashboard {
+    padding: v.$spacing-xl;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: v.$spacing-xl;
+        gap: v.$spacing-lg;
+    }
+
+    &__title {
+        font-size: v.$font-size-xl;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__create-btn {
+        background-color: v.$color-button-primary;
+        color: v.$color-button-text;
+        border: none;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-sm v.$spacing-lg;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color v.$transition-fast;
+
+        &:hover {
+            background-color: v.$color-button-primary-hover;
+        }
+
+        &:active {
+            background-color: v.$color-button-primary-active;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: v.$spacing-md;
+    }
+
+    &__empty {
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-md;
+        text-align: center;
+        margin-top: v.$spacing-xl;
+    }
+}

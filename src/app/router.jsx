@@ -3,7 +3,7 @@ import Layout from "../ui/pages/Layout";
 import Home from "../ui/pages/Home";
 import Login from "../ui/pages/Login";
 import AdminDashboard from "../ui/pages/dashboard/admin";
-import StaffDashboard from "../ui/pages/dashboard/staff"
+import StaffDashboard from "../ui/pages/dashboard/staff/StaffDashboard"
 import StudentDashboard from "../ui/pages/dashboard/student/StudentDashboard";
 
 const router = createBrowserRouter([

@@ -1,0 +1,55 @@
+@use '../../../styles/variables' as v;
+
+.slot-card {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-background-tertiary;
+    border-radius: v.$radius-md;
+    padding: v.$spacing-md v.$spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$spacing-md;
+    transition: border-color v.$transition-fast;
+
+    &:hover {
+        border-color: v.$color-accent-700;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+    }
+
+    &__date {
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__time {
+        font-size: v.$font-size-sm;
+        color: v.$color-accent-300;
+        margin: 0;
+    }
+
+    &__delete-btn {
+        background-color: transparent;
+        border: 1px solid v.$color-error;
+        color: v.$color-error;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-xs v.$spacing-md;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background-color v.$transition-fast, color v.$transition-fast;
+
+        &:hover {
+            background-color: v.$color-error;
+            color: v.$color-button-text;
+        }
+    }
+}
