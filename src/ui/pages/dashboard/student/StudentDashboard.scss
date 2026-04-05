@@ -5,6 +5,47 @@
     max-width: 1200px;
     margin: 0 auto;
 
+    &__tabs {
+        display: flex;
+        gap: v.$spacing-sm;
+        margin-bottom: v.$spacing-xl;
+        border-bottom: 1px solid v.$color-background-tertiary;
+    }
+
+    &__tab {
+        background: none;
+        border: none;
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        padding: v.$spacing-sm v.$spacing-md;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        display: flex;
+        align-items: center;
+        gap: v.$spacing-sm;
+        transition: color v.$transition-fast, border-color v.$transition-fast;
+
+        &:hover {
+            color: v.$color-text-primary;
+        }
+
+        &--active {
+            color: v.$color-accent-300;
+            border-bottom-color: v.$color-accent-300;
+        }
+    }
+
+    &__tab-badge {
+        background-color: v.$color-accent-700;
+        color: v.$color-button-text;
+        font-size: v.$font-size-xs;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 999px;
+    }
+
     &__header {
         display: flex;
         align-items: center;
@@ -47,10 +88,78 @@
         gap: v.$spacing-lg;
     }
 
+    &__bookings {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-md;
+    }
+
     &__empty {
         color: v.$color-text-secondary;
         font-size: v.$font-size-md;
         text-align: center;
         margin-top: v.$spacing-xl;
+    }
+}
+
+.booking-card {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-background-tertiary;
+    border-radius: v.$radius-md;
+    padding: v.$spacing-lg;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: v.$spacing-lg;
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+    }
+
+    &__staff {
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__department {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        margin: 0;
+    }
+
+    &__time {
+        font-size: v.$font-size-sm;
+        color: v.$color-accent-300;
+        margin: 0;
+    }
+
+    &__note {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        font-style: italic;
+        margin: v.$spacing-xs 0 0 0;
+    }
+
+    &__cancel-btn {
+        background-color: transparent;
+        border: 1px solid v.$color-error;
+        color: v.$color-error;
+        border-radius: v.$radius-sm;
+        padding: v.$spacing-sm v.$spacing-md;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color v.$transition-fast, color v.$transition-fast;
+        flex-shrink: 0;
+
+        &:hover {
+            background-color: v.$color-error;
+            color: v.$color-button-text;
+        }
     }
 }
