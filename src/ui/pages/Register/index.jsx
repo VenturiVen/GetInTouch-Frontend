@@ -1,40 +1,45 @@
 import './index.scss';
 
-import { useNavigate } from 'react-router-dom';
-
 import Button from '../../components/Button'
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { login, clearError } from '../../../service/user/userSlice'
-
-const Login = () => {
+const Register = () => {
     const dispatch = useDispatch();
 
     const { loading, error } = useSelector((state) => state.user);
-    const navigate = useNavigate();
+
     const [formError, setFormError] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLoginClick = () => {
-        dispatch(clearError());
+    const handleRegisterClick = () => {
+        // dispatch(clearError());
         setFormError('');
 
-        if (!email || !password) {
+        if (!name || !email || !password) {
             setFormError("Please fill in all fields.");
             return;
         }
 
-        dispatch(login({ email, password }));
+        return;
+        // dispatch(login({ email, password }));
     };
 
     return (
-        <div className="container login-page">
+        <div className="container register-page">
             <div className="text-zone">
-                <h1>Login</h1>
+                <h1>Register</h1>
                 <div>
+                    <input
+                        name="name_input"
+                        type="text"
+                        placeholder="Enterd name"
+                        value={email}
+                        onChange={(e) => setName(e.target.value)}
+                    /> <br />
                     <input
                         name="email_input"
                         type="email"
@@ -50,21 +55,15 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     /> <br />
                     <Button
-                        label={loading ? "Logging in..." : "Login"}
-                        className="login-btn"
-                        onClick={handleLoginClick}
+                        label={loading ? "Registering..." : "Register"}
+                        className="register-btn"
+                        onClick={handleRegisterClick}
                     />
                     <p className="error">{formError || error || ""}</p>
-                    <p className="Register-Text" >Don't have an account?</p>
-                    <Button
-                        label="Register"
-                        className="login-btn"
-                        onClick={() => navigate('/register')}
-                    />
                 </div>
             </div>
         </div>
     );
 }
 
-export default Login;
+export default Register;
