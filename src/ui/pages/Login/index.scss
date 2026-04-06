@@ -25,7 +25,14 @@
 
     .error {
         min-height: 25px;
+        max-height: 25px;
         color: v.$color-error;
+    }
+
+    .success {
+        min-height: 25px;
+        max-height: 25px;
+        color: v.$color-success;
     }
 
     .Register-Text {

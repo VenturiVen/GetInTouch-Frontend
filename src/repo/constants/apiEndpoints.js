@@ -1,5 +1,8 @@
 // Auth
 export const LOGIN = '/api/auth/login';
+export const REGISTER_STUDENT = '/api/auth/register/student';
+export const REGISTER_STAFF = '/api/auth/register/staff';
+export const REGISTER_ADMIN = '/api/auth/register/admin';
 export const LOGOUT = '/api/auth/logout';
 
 // Users (Admin)

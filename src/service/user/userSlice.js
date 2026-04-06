@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser } from './userService';
+import { loginUser, registerUser } from './userService';
 
 // runs async API call
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
@@ -7,11 +7,25 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
         const data = await loginUser(credentials);
         return data;
     } catch (error) {
-        return rejectWithValue(
-            error?.response?.data?.message || error.message || 'Login failed'
-        );
+        return rejectWithValue({
+            status: error?.response?.status,
+            message: error?.response?.data || error.message || 'Login Failed'
+        });
     }
 });
+
+export const register = createAsyncThunk('user/register', async ({ role, credentials }, { rejectWithValue }) => {
+    try {
+        const data = await registerUser(role, credentials);
+        return data;
+    } catch (error) {
+        return rejectWithValue({
+            status: error?.response?.status,
+            message: error?.response?.data || error.message || 'Login Failed'
+        });
+    }
+}
+);
 
 // #TO-DO: Implement persistent token and user using localstorage
 
@@ -43,12 +57,27 @@ const userSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
-                const { user, token } = action.payload;
-                state.currentUser = action.payload.user;
-                state.token = action.payload.token;
-                state.role = action.payload.user?.role;
+                const { user, token } = action.payload || {};
+                state.currentUser = user || null;
+                state.token = token || null;
+                state.role = user?.role || null;
             })
             .addCase(login.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(register.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.loading = false;
+                const { user, token } = action.payload || {};
+                state.currentUser = user || null;
+                state.token = token || null;
+                state.role = user?.role || null;
+            })
+            .addCase(register.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
