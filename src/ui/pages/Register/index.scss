@@ -1,6 +1,6 @@
 @use '../../../styles/variables' as v;
 
-.login-page {
+.register-page {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,13 +28,7 @@
         color: v.$color-error;
     }
 
-    .Register-Text {
-        font-weight: bold;
-        font-size: large;
-        padding-top: 5%;
-    }
-
-    .login-btn {
+    .register-btn {
         min-width: 200px;
     }
 }
