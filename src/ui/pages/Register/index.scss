@@ -23,9 +23,23 @@
         margin: 0.5rem;
     }
 
+    .role-select {
+        min-width: 150px;
+        max-width: 400px;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
     .error {
         min-height: 25px;
+        max-height: 25px;
         color: v.$color-error;
+    }
+
+    .success {
+        min-height: 25px;
+        max-height: 25px;
+        color: v.$color-success;
     }
 
     .register-btn {

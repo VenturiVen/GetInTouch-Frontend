@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout, clearError } from './userSlice';
+import { login, register, logout, clearError } from './userSlice';
 
 // wrapping redux logic inside a React hook for easier calling
 // e.g.,
@@ -15,6 +15,10 @@ export function useUser() {
     const handleLogin = (credentials) => {
         dispatch(login(credentials));
     };
+
+    const handleRegister = (role, credentials) => {
+        dispatch(register(role, credentials))
+    }
 
     const handleLogout = () => {
         dispatch(logout());
@@ -32,6 +36,7 @@ export function useUser() {
         error,
 
         login: handleLogin,
+        register: handleRegister,
         logout: handleLogout,
         clearError: handleClearError,
     };

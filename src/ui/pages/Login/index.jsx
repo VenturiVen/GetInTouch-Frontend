@@ -1,9 +1,8 @@
 import './index.scss';
 
-import { useNavigate } from 'react-router-dom';
-
 import Button from '../../components/Button'
 
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,13 +11,31 @@ import { login, clearError } from '../../../service/user/userSlice'
 const Login = () => {
     const dispatch = useDispatch();
 
+    const [isSuccess, setIsSuccess] = useState(false);
     const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [formError, setFormError] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLoginClick = () => {
+    const getErrorMessage = (error) => {
+        if (!error) return "";
+
+        switch (error.status) {
+            case 401:
+                return "User does not exist or password is incorrect.";
+            case 403:
+                return "Access denied.";
+            case 404:
+                return "User not found.";
+            case 500:
+                return "Server error occurred.";
+            default:
+                return error.message || "Login failed.";
+        }
+    };
+
+    const handleLoginClick = async () => {
         dispatch(clearError());
         setFormError('');
 
@@ -27,7 +44,15 @@ const Login = () => {
             return;
         }
 
-        dispatch(login({ email, password }));
+        const resultAction = await dispatch(login({ email, password }));
+
+        if (login.fulfilled.match(resultAction)) {
+            setFormError("Login Success!")
+            setIsSuccess(true);
+        } else {
+            console.log(resultAction.payload);
+            setIsSuccess(false);
+        }
     };
 
     return (
@@ -54,7 +79,9 @@ const Login = () => {
                         className="login-btn"
                         onClick={handleLoginClick}
                     />
-                    <p className="error">{formError || error || ""}</p>
+                    <p className={isSuccess ? "success" : "error"}>
+                        {formError || getErrorMessage(error) || ""}
+                    </p>
                     <p className="Register-Text" >Don't have an account?</p>
                     <Button
                         label="Register"
