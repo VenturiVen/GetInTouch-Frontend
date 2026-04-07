@@ -17,14 +17,20 @@
         color: v.$color-accent-500;
         margin-left: 4rem;
     }
-    
+
     .nav-container {
         margin-top: 1rem;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: right;
+        padding: 0 4rem;
         width: 30%;
-        margin-right: 4rem;
+    }
+
+    .nav-links {
+        gap: 2rem;
+        align-items: center;
+        display: flex;
     }
 
     nav {
@@ -44,6 +50,25 @@
             &:active {
                 transform: scale(0.95);
             }
+        }
+    }
+
+    .logout-btn {
+        background: none;
+        border: none;
+        font-weight: bold;
+        font-size: 2rem;
+        color: v.$color-text-primary;
+        cursor: pointer;
+        transition: transform v.$transition-fast, color v.$transition-medium;
+
+        &:hover {
+            color: v.$color-text-secondary;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: scale(0.95);
         }
     }
 }

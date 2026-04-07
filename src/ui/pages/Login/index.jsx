@@ -49,6 +49,7 @@ const Login = () => {
         if (login.fulfilled.match(resultAction)) {
             setFormError("Login Success!")
             setIsSuccess(true);
+            navigate('/')
         } else {
             console.log(resultAction.payload);
             setIsSuccess(false);

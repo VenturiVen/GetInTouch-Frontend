@@ -1,0 +1,52 @@
+@use '../../../styles/variables' as v;
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .text-zone {
+        top: 10%;
+        left: 15%;
+        right: 15%;
+        position: fixed;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    .info {
+        font-size: large;
+        line-height: 2;
+        max-width: 600;
+        margin-top: 1rem;
+    }
+
+    h1 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        font-size: xx-large;
+        letter-spacing: 0.1cap;
+    }
+
+    h2 {
+        padding-bottom: 1rem;
+        letter-spacing: 0.1cap;
+    }
+
+    .register-btn {
+        width: 100%;
+        min-width: 400px;
+        max-width: 600px;
+        width: 100%;
+        min-height: 50px;
+        max-height: 100px;
+        font-size: xx-large;
+    }
+
+    .brandName {
+        color: v.$color-accent-300;
+    }
+}
