@@ -1,0 +1,86 @@
+@use '../../../styles/variables' as v;
+
+.booked-slot-card {
+    background-color: v.$color-background-secondary;
+    border: 1px solid v.$color-accent-700;
+    border-radius: v.$radius-md;
+    padding: v.$spacing-lg;
+    display: flex;
+    align-items: flex-start;
+    gap: v.$spacing-lg;
+
+    &__time-block {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+        min-width: 160px;
+        flex-shrink: 0;
+    }
+
+    &__date {
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__time {
+        font-size: v.$font-size-sm;
+        color: v.$color-accent-300;
+        margin: 0;
+    }
+
+    &__divider {
+        width: 1px;
+        align-self: stretch;
+        background-color: v.$color-background-tertiary;
+        flex-shrink: 0;
+    }
+
+    &__student {
+        display: flex;
+        align-items: flex-start;
+        gap: v.$spacing-md;
+        flex: 1;
+    }
+
+    &__avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: v.$color-accent-700;
+        color: v.$color-button-text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: v.$font-size-sm;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    &__student-info {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-xs;
+    }
+
+    &__student-name {
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        color: v.$color-text-primary;
+        margin: 0;
+    }
+
+    &__student-meta {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        margin: 0;
+    }
+
+    &__note {
+        font-size: v.$font-size-sm;
+        color: v.$color-text-secondary;
+        font-style: italic;
+        margin: v.$spacing-xs 0 0 0;
+    }
+}

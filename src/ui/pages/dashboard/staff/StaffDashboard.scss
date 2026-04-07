@@ -5,6 +5,53 @@
     max-width: 1200px;
     margin: 0 auto;
 
+    &__tabs {
+        display: flex;
+        gap: v.$spacing-sm;
+        margin-bottom: v.$spacing-xl;
+        border-bottom: 1px solid v.$color-background-tertiary;
+    }
+
+    &__tab {
+        background: none;
+        border: none;
+        color: v.$color-text-secondary;
+        font-size: v.$font-size-md;
+        font-weight: 600;
+        padding: v.$spacing-sm v.$spacing-md;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        display: flex;
+        align-items: center;
+        gap: v.$spacing-sm;
+        transition: color v.$transition-fast, border-color v.$transition-fast;
+
+        &:hover {
+            color: v.$color-text-primary;
+        }
+
+        &--active {
+            color: v.$color-accent-300;
+            border-bottom-color: v.$color-accent-300;
+        }
+    }
+
+    &__tab-badge {
+        background-color: v.$color-accent-700;
+        color: v.$color-button-text;
+        font-size: v.$font-size-xs;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 999px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: v.$spacing-md;
+    }
+
     &__header {
         display: flex;
         align-items: center;
