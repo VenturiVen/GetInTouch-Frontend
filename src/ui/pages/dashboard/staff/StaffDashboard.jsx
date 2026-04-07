@@ -40,7 +40,7 @@ const StaffDashboard = () => {
 
     return (
         <>
-            <div className="staff-dashboard">
+            <div className="container staff-dashboard">
                 <div className="staff-dashboard__tabs">
                     <button
                         className={`staff-dashboard__tab ${activeTab === 'available' ? 'staff-dashboard__tab--active' : ''}`}

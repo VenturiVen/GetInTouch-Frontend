@@ -64,7 +64,7 @@ const StudentDashboard = () => {
 
     return (
         <>
-            <div className="student-dashboard">
+            <div className="container student-dashboard">
                 <div className="student-dashboard__tabs">
                     <button
                         className={`student-dashboard__tab ${activeTab === 'directory' ? 'student-dashboard__tab--active' : ''}`}

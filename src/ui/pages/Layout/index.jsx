@@ -9,7 +9,7 @@ const Layout = () => {
                 <NavBar />
             </div>
 
-            <div className="page">
+            <div key={location.pathname} className="page">
                 <Outlet />
             </div>
         </div>
