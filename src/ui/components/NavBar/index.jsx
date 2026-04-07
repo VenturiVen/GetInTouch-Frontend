@@ -1,17 +1,24 @@
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from "../../../service/user/userSlice";
 
 import './index.scss';
 
 const NavBar = () => {
+    const { token } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
     return (
         <div className="nav-bar">
             <div className="brand">
-                {/* replace with UL logo maybe? couldnt find a transparent png */}
                 <h1>Get In Touch</h1>
             </div>
 
             <div className="nav-container">
-                <nav>
+                <nav className="nav-links">
                     <NavLink
                         to="/"
                         end
@@ -19,22 +26,34 @@ const NavBar = () => {
                     >
                         Home
                     </NavLink>
-                </nav>
-                <nav>
-                    <NavLink
-                        to="/dashboard/admin"
-                        className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                        Dashboard
-                    </NavLink>
-                </nav>
-                <nav>
-                    <NavLink
-                        to="/login"
-                        className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                        Login
-                    </NavLink>
+
+                    {token && (
+                        <NavLink
+                            to="/dashboard"
+                            className={({ isActive }) => (isActive ? "active" : "")}
+                        >
+                            Dashboard
+                        </NavLink>
+                    )}
+
+                    {!token ? (
+                        <NavLink
+                            to="/login"
+                            className={({ isActive }) => (isActive ? "active" : "")}
+                        >
+                            Login
+                        </NavLink>
+                    ) : (
+                        <button
+                            className="logout-btn"
+                            onClick={() => {
+                                dispatch(logout());
+                                navigate('/');
+                            }}
+                        >
+                            Logout
+                        </button>
+                    )}
                 </nav>
             </div>
         </div>

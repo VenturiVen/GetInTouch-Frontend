@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser, registerUser } from './userService';
+import { decodeToken, isTokenExpired } from '../../utils/auth'
 
 // runs async API call
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
@@ -27,14 +28,35 @@ export const register = createAsyncThunk('user/register', async ({ role, credent
 }
 );
 
-// #TO-DO: Implement persistent token and user using localstorage
+const getLocalStorage = (key) => {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+};
+
+const storedToken = getLocalStorage('token');
+
+let storedUser = null;
+let storedRole = null;
+
+if (storedToken && !isTokenExpired(storedToken)) {
+    const decoded = decodeToken(storedToken);
+    storedUser = decoded;
+    storedRole = decoded?.role;
+} else {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+}
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        currentUser: null,
-        token: null,
-        role: null,
+        currentUser: storedUser || null,
+        token: storedToken || null,
+        role: storedRole || null,
         loading: false,
         error: null,
     },
@@ -44,6 +66,10 @@ const userSlice = createSlice({
             state.token = null;
             state.role = null;
             state.loading = false;
+
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('role');
         },
         clearError: (state) => {
             state.error = null;
@@ -57,10 +83,22 @@ const userSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
-                const { user, token } = action.payload || {};
-                state.currentUser = user || null;
+
+                const token = action.payload?.accessToken;
+
                 state.token = token || null;
-                state.role = user?.role || null;
+
+                // localstorage stuff for persistent storage
+                if (token) {
+                    const decoded = decodeToken(token);
+
+                    state.currentUser = decoded;
+                    state.role = decoded?.role;
+
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(decoded));
+                    localStorage.setItem('role', decoded?.role);
+                }
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -72,10 +110,7 @@ const userSlice = createSlice({
             })
             .addCase(register.fulfilled, (state, action) => {
                 state.loading = false;
-                const { user, token } = action.payload || {};
-                state.currentUser = user || null;
-                state.token = token || null;
-                state.role = user?.role || null;
+                state.error = null;
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
