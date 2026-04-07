@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginUser, registerUser } from './userService';
-import { decodeToken, isTokenExpired } from '../../utils/auth'
+import { decodeToken, isTokenExpired } from '../../infra/auth/token'
+import { storage } from '../../infra/storage/localStorage'
 
 // runs async API call
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
@@ -28,15 +29,7 @@ export const register = createAsyncThunk('user/register', async ({ role, credent
 }
 );
 
-const getLocalStorage = (key) => {
-    try {
-        return localStorage.getItem(key);
-    } catch {
-        return null;
-    }
-};
-
-const storedToken = getLocalStorage('token');
+const storedToken = storage.get('token');
 
 let storedUser = null;
 let storedRole = null;
@@ -46,17 +39,17 @@ if (storedToken && !isTokenExpired(storedToken)) {
     storedUser = decoded;
     storedRole = decoded?.role;
 } else {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('role');
+    storage.remove('token');
+    storage.remove('user');
+    storage.remove('role');
 }
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        currentUser: storedUser || null,
-        token: storedToken || null,
-        role: storedRole || null,
+        currentUser: storedUser,
+        token: storedUser ? storedToken : null,
+        role: storedRole,
         loading: false,
         error: null,
     },
@@ -67,9 +60,9 @@ const userSlice = createSlice({
             state.role = null;
             state.loading = false;
 
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('role');
+            storage.remove('token');
+            storage.remove('user');
+            storage.remove('role');
         },
         clearError: (state) => {
             state.error = null;
@@ -91,13 +84,15 @@ const userSlice = createSlice({
                 // localstorage stuff for persistent storage
                 if (token) {
                     const decoded = decodeToken(token);
+                    const roleName = decoded?.role?.replace('ROLE_', '');
 
+                    state.token = token;
                     state.currentUser = decoded;
                     state.role = decoded?.role;
 
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('user', JSON.stringify(decoded));
-                    localStorage.setItem('role', decoded?.role);
+                    storage.set('token', token);
+                    storage.set('user', decoded);
+                    storage.set('role', roleName);
                 }
             })
             .addCase(login.rejected, (state, action) => {
