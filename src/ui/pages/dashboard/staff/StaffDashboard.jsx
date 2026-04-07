@@ -6,17 +6,17 @@ import './StaffDashboard.scss';
 
 // TODO: replace with API call to GET /api/slots when backend is ready
 const mockSlots = [
-    { id: 1, date: 'Monday, 7 Apr 2026', startTime: '09:00', endTime: '09:30' },
-    { id: 2, date: 'Monday, 7 Apr 2026', startTime: '10:00', endTime: '10:30' },
-    { id: 3, date: 'Tuesday, 8 Apr 2026', startTime: '14:00', endTime: '14:30' },
-    { id: 4, date: 'Wednesday, 9 Apr 2026', startTime: '11:00', endTime: '11:30' },
+    { id: 1, date: 'Monday, 6 Apr 2026', startTime: '09:00', endTime: '09:30' },
+    { id: 2, date: 'Monday, 6 Apr 2026', startTime: '10:00', endTime: '10:30' },
+    { id: 3, date: 'Tuesday, 7 Apr 2026', startTime: '14:00', endTime: '14:30' },
+    { id: 4, date: 'Wednesday, 8 Apr 2026', startTime: '11:00', endTime: '11:30' },
 ];
 
 // TODO: replace with API call to GET /api/slots?status=booked when backend is ready
 const mockBookedSlots = [
-    { id: 10, date: 'Monday, 7 Apr 2026', startTime: '11:00', endTime: '11:30', studentName: 'John Byrne', course: 'Computer Science', year: 4, note: 'I would like to discuss my CS4135 project.' },
-    { id: 11, date: 'Tuesday, 8 Apr 2026', startTime: '10:00', endTime: '10:30', studentName: 'Sarah Lynch', course: 'Computer Science', year: 3, note: 'Need help understanding the last lecture on microservices.' },
-    { id: 12, date: 'Wednesday, 9 Apr 2026', startTime: '14:00', endTime: '14:30', studentName: 'Cian Murphy', course: 'Computer Science', year: 4, note: 'Final year project feedback session.' },
+    { id: 10, date: 'Monday, 6 Apr 2026', startTime: '11:00', endTime: '11:30', studentName: 'John Byrne', course: 'Computer Science', year: 4, note: 'I would like to discuss my CS4135 project.' },
+    { id: 11, date: 'Tuesday, 7 Apr 2026', startTime: '10:00', endTime: '10:30', studentName: 'Sarah Lynch', course: 'Computer Science', year: 3, note: 'Need help understanding the last lecture on microservices.' },
+    { id: 12, date: 'Wednesday, 8 Apr 2026', startTime: '14:00', endTime: '14:30', studentName: 'Cian Murphy', course: 'Computer Science', year: 4, note: 'Final year project feedback session.' },
 ];
 
 let nextId = mockSlots.length + 1;
@@ -24,7 +24,12 @@ let nextId = mockSlots.length + 1;
 const StaffDashboard = () => {
     const [activeTab, setActiveTab] = useState('available');
     const [slots, setSlots] = useState(mockSlots);
-    const [bookedSlots] = useState(mockBookedSlots);
+    const [bookedSlots, setBookedSlots] = useState(mockBookedSlots);
+
+    const handleDeleteBooked = (slotId) => {
+        // TODO: call DELETE /api/slots/:id when backend is ready
+        setBookedSlots(prev => prev.filter(s => s.id !== slotId));
+    };
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     const handleCreate = ({ date, startTime, endTime }) => {
@@ -95,7 +100,7 @@ const StaffDashboard = () => {
                         {bookedSlots.length > 0 ? (
                             <div className="staff-dashboard__list">
                                 {bookedSlots.map(booking => (
-                                    <BookedSlotCard key={booking.id} booking={booking} />
+                                    <BookedSlotCard key={booking.id} booking={booking} onDelete={handleDeleteBooked} />
                                 ))}
                             </div>
                         ) : (

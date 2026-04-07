@@ -1,17 +1,15 @@
-@use '../../../styles/variables' as v;
-
 .availability-modal {
-    background-color: v.$color-background-secondary;
-    border: 1px solid v.$color-background-tertiary;
-    border-radius: v.$radius-lg;
-    padding: v.$spacing-xl;
+    background-color: #1c1f1c;
+    border: 1px solid #262a26;
+    border-radius: 16px;
+    padding: 32px;
     width: 100%;
     max-width: 560px;
     max-height: 80vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: v.$spacing-lg;
+    gap: 24px;
 
     &__overlay {
         position: fixed;
@@ -21,7 +19,7 @@
         align-items: center;
         justify-content: center;
         z-index: 200;
-        padding: v.$spacing-lg;
+        padding: 24px;
     }
 
     &__header {
@@ -31,91 +29,91 @@
     }
 
     &__name {
-        font-size: v.$font-size-lg;
-        color: v.$color-text-primary;
+        font-size: 1.5rem;
+        color: #e6f4ea;
         margin: 0;
     }
 
     &__department {
-        font-size: v.$font-size-sm;
-        color: v.$color-text-secondary;
-        margin: v.$spacing-xs 0 0 0;
+        font-size: 0.875rem;
+        color: #b5b5b5;
+        margin: 4px 0 0 0;
     }
 
     &__close {
         background: none;
         border: none;
-        color: v.$color-text-secondary;
-        font-size: v.$font-size-lg;
+        color: #b5b5b5;
+        font-size: 1.5rem;
         cursor: pointer;
-        padding: v.$spacing-xs;
+        padding: 4px;
         line-height: 1;
-        transition: color v.$transition-fast;
+        transition: color 0.2s ease;
 
         &:hover {
-            color: v.$color-text-primary;
+            color: #e6f4ea;
         }
     }
 
     &__subtitle {
-        font-size: v.$font-size-md;
-        color: v.$color-text-secondary;
+        font-size: 1rem;
+        color: #b5b5b5;
         margin: 0;
-        padding-bottom: v.$spacing-sm;
-        border-bottom: 1px solid v.$color-background-tertiary;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #262a26;
     }
 
     &__slots {
         display: flex;
         flex-direction: column;
-        gap: v.$spacing-sm;
+        gap: 8px;
     }
 
     &__slot {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: v.$color-background-tertiary;
-        border-radius: v.$radius-md;
-        padding: v.$spacing-md;
-        gap: v.$spacing-md;
+        background-color: #262a26;
+        border-radius: 8px;
+        padding: 16px;
+        gap: 16px;
     }
 
     &__slot-info {
         display: flex;
         flex-direction: column;
-        gap: v.$spacing-xs;
+        gap: 4px;
     }
 
     &__slot-date {
-        font-size: v.$font-size-sm;
-        color: v.$color-text-primary;
+        font-size: 0.875rem;
+        color: #e6f4ea;
         font-weight: 500;
     }
 
     &__slot-time {
-        font-size: v.$font-size-sm;
-        color: v.$color-accent-300;
+        font-size: 0.875rem;
+        color: #6fdc8c;
     }
 
     &__book-btn {
-        background-color: v.$color-button-primary;
-        color: v.$color-button-text;
+        background-color: #048524;
+        color: #ffffff;
         border: none;
-        border-radius: v.$radius-sm;
-        padding: v.$spacing-sm v.$spacing-md;
-        font-size: v.$font-size-sm;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color v.$transition-fast;
+        transition: background-color 0.2s ease;
         white-space: nowrap;
 
         &:hover {
-            background-color: v.$color-button-primary-hover;
+            background-color: #03691d;
         }
 
         &:active {
-            background-color: v.$color-button-primary-active;
+            background-color: #024d15;
         }
     }
 }

@@ -1,46 +1,44 @@
-@use '../../../../styles/variables' as v;
-
 .staff-dashboard {
-    padding: v.$spacing-xl;
+    padding: 32px;
     max-width: 1200px;
     margin: 0 auto;
 
     &__tabs {
         display: flex;
-        gap: v.$spacing-sm;
-        margin-bottom: v.$spacing-xl;
-        border-bottom: 1px solid v.$color-background-tertiary;
+        gap: 8px;
+        margin-bottom: 32px;
+        border-bottom: 1px solid #262a26;
     }
 
     &__tab {
         background: none;
         border: none;
-        color: v.$color-text-secondary;
-        font-size: v.$font-size-md;
+        color: #b5b5b5;
+        font-size: 1rem;
         font-weight: 600;
-        padding: v.$spacing-sm v.$spacing-md;
+        padding: 8px 16px;
         cursor: pointer;
         border-bottom: 2px solid transparent;
         margin-bottom: -1px;
         display: flex;
         align-items: center;
-        gap: v.$spacing-sm;
-        transition: color v.$transition-fast, border-color v.$transition-fast;
+        gap: 8px;
+        transition: color 0.2s ease, border-color 0.2s ease;
 
         &:hover {
-            color: v.$color-text-primary;
+            color: #e6f4ea;
         }
 
         &--active {
-            color: v.$color-accent-300;
-            border-bottom-color: v.$color-accent-300;
+            color: #6fdc8c;
+            border-bottom-color: #6fdc8c;
         }
     }
 
     &__tab-badge {
-        background-color: v.$color-accent-700;
-        color: v.$color-button-text;
-        font-size: v.$font-size-xs;
+        background-color: #03691d;
+        color: #ffffff;
+        font-size: 0.75rem;
         font-weight: 700;
         padding: 2px 6px;
         border-radius: 999px;
@@ -49,53 +47,53 @@
     &__list {
         display: flex;
         flex-direction: column;
-        gap: v.$spacing-md;
+        gap: 16px;
     }
 
     &__header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: v.$spacing-xl;
-        gap: v.$spacing-lg;
+        margin-bottom: 32px;
+        gap: 24px;
     }
 
     &__title {
-        font-size: v.$font-size-xl;
-        color: v.$color-text-primary;
+        font-size: 2rem;
+        color: #e6f4ea;
         margin: 0;
     }
 
     &__create-btn {
-        background-color: v.$color-button-primary;
-        color: v.$color-button-text;
+        background-color: #048524;
+        color: #ffffff;
         border: none;
-        border-radius: v.$radius-sm;
-        padding: v.$spacing-sm v.$spacing-lg;
-        font-size: v.$font-size-sm;
+        border-radius: 4px;
+        padding: 8px 24px;
+        font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color v.$transition-fast;
+        transition: background-color 0.2s ease;
 
         &:hover {
-            background-color: v.$color-button-primary-hover;
+            background-color: #03691d;
         }
 
         &:active {
-            background-color: v.$color-button-primary-active;
+            background-color: #024d15;
         }
     }
 
     &__grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: v.$spacing-md;
+        gap: 16px;
     }
 
     &__empty {
-        color: v.$color-text-secondary;
-        font-size: v.$font-size-md;
+        color: #b5b5b5;
+        font-size: 1rem;
         text-align: center;
-        margin-top: v.$spacing-xl;
+        margin-top: 32px;
     }
 }

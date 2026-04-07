@@ -1,15 +1,13 @@
-@use '../../../styles/variables' as v;
-
 .booking-modal {
-    background-color: v.$color-background-secondary;
-    border: 1px solid v.$color-background-tertiary;
-    border-radius: v.$radius-lg;
-    padding: v.$spacing-xl;
+    background-color: #1c1f1c;
+    border: 1px solid #262a26;
+    border-radius: 16px;
+    padding: 32px;
     width: 100%;
     max-width: 480px;
     display: flex;
     flex-direction: column;
-    gap: v.$spacing-lg;
+    gap: 24px;
 
     &__overlay {
         position: fixed;
@@ -19,7 +17,7 @@
         align-items: center;
         justify-content: center;
         z-index: 300;
-        padding: v.$spacing-lg;
+        padding: 24px;
     }
 
     &__header {
@@ -29,115 +27,115 @@
     }
 
     &__title {
-        font-size: v.$font-size-lg;
-        color: v.$color-text-primary;
+        font-size: 1.5rem;
+        color: #e6f4ea;
         margin: 0;
     }
 
     &__close {
         background: none;
         border: none;
-        color: v.$color-text-secondary;
-        font-size: v.$font-size-lg;
+        color: #b5b5b5;
+        font-size: 1.5rem;
         cursor: pointer;
-        padding: v.$spacing-xs;
+        padding: 4px;
         line-height: 1;
-        transition: color v.$transition-fast;
+        transition: color 0.2s ease;
 
         &:hover {
-            color: v.$color-text-primary;
+            color: #e6f4ea;
         }
     }
 
     &__details {
-        background-color: v.$color-background-tertiary;
-        border-radius: v.$radius-md;
-        padding: v.$spacing-md;
+        background-color: #262a26;
+        border-radius: 8px;
+        padding: 16px;
         display: flex;
         flex-direction: column;
-        gap: v.$spacing-xs;
+        gap: 4px;
     }
 
     &__staff {
-        font-size: v.$font-size-md;
+        font-size: 1rem;
         font-weight: 600;
-        color: v.$color-text-primary;
+        color: #e6f4ea;
         margin: 0;
     }
 
     &__slot {
-        font-size: v.$font-size-sm;
-        color: v.$color-accent-300;
+        font-size: 0.875rem;
+        color: #6fdc8c;
         margin: 0;
     }
 
     &__note-section {
         display: flex;
         flex-direction: column;
-        gap: v.$spacing-sm;
+        gap: 8px;
     }
 
     &__label {
-        font-size: v.$font-size-sm;
-        color: v.$color-text-secondary;
+        font-size: 0.875rem;
+        color: #b5b5b5;
     }
 
     &__textarea {
-        background-color: v.$color-background-tertiary;
-        border: 1px solid v.$color-background-tertiary;
-        border-radius: v.$radius-md;
-        color: v.$color-text-primary;
-        font-size: v.$font-size-sm;
-        font-family: v.$font-family-base;
-        padding: v.$spacing-md;
+        background-color: #262a26;
+        border: 1px solid #262a26;
+        border-radius: 8px;
+        color: #e6f4ea;
+        font-size: 0.875rem;
+        font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+        padding: 16px;
         resize: vertical;
-        transition: border-color v.$transition-fast;
+        transition: border-color 0.2s ease;
 
         &::placeholder {
-            color: v.$color-text-secondary;
+            color: #b5b5b5;
         }
 
         &:focus {
             outline: none;
-            border-color: v.$color-accent-500;
+            border-color: #048524;
         }
     }
 
     &__actions {
         display: flex;
         justify-content: flex-end;
-        gap: v.$spacing-md;
+        gap: 16px;
     }
 
     &__cancel-btn {
-        background-color: v.$color-button-secondary;
-        color: v.$color-button-secondary-text;
+        background-color: #2e332e;
+        color: #e6f4ea;
         border: none;
-        border-radius: v.$radius-sm;
-        padding: v.$spacing-sm v.$spacing-lg;
-        font-size: v.$font-size-sm;
+        border-radius: 4px;
+        padding: 8px 24px;
+        font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color v.$transition-fast;
+        transition: background-color 0.2s ease;
 
         &:hover {
-            background-color: v.$color-button-secondary-hover;
+            background-color: #3a403a;
         }
     }
 
     &__confirm-btn {
-        background-color: v.$color-button-primary;
-        color: v.$color-button-text;
+        background-color: #048524;
+        color: #ffffff;
         border: none;
-        border-radius: v.$radius-sm;
-        padding: v.$spacing-sm v.$spacing-lg;
-        font-size: v.$font-size-sm;
+        border-radius: 4px;
+        padding: 8px 24px;
+        font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background-color v.$transition-fast;
+        transition: background-color 0.2s ease;
 
         &:hover:not(:disabled) {
-            background-color: v.$color-button-primary-hover;
+            background-color: #03691d;
         }
 
         &:disabled {
