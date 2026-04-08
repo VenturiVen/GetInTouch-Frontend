@@ -18,3 +18,25 @@ export async function registerUser(role, credentials) {
     const res = await API.post(endpoint, credentials);
     return res.data;
 }
+
+export async function fetchUser(role, credentials) {
+    role = role?.replace('ROLE_', '');
+    const endpointMap = {
+        STUDENT: '/api/student/me',
+        STAFF: '/api/staff/me',
+        ADMIN: '/api/admin/me',
+    };
+
+    const endpoint = endpointMap[role];
+
+    console.log("Calling endpoint:", endpoint, credentials)
+    console.log("Token: ", credentials)
+
+    const res = await API.get(endpoint, {
+        headers: {
+            Authorization: `Bearer ${credentials}`
+        }
+    });
+
+    return res.data;
+}

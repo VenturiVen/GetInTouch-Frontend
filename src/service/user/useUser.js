@@ -20,6 +20,10 @@ export function useUser() {
         dispatch(register(role, credentials))
     }
 
+    const handleFetch = (role, credentials) => {
+        dispatch(fetch(role, credentials))
+    }
+
     const handleLogout = () => {
         dispatch(logout());
     };
@@ -37,6 +41,7 @@ export function useUser() {
 
         login: handleLogin,
         register: handleRegister,
+        fetch: handleFetch,
         logout: handleLogout,
         clearError: handleClearError,
     };

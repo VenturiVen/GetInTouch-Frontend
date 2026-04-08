@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser } from './userService';
+import { loginUser, registerUser, fetchUser } from './userService';
 import { decodeToken, isTokenExpired } from '../../infra/auth/token'
 import { storage } from '../../infra/storage/localStorage'
 
@@ -26,8 +26,19 @@ export const register = createAsyncThunk('user/register', async ({ role, credent
             message: error?.response?.data || error.message || 'Login Failed'
         });
     }
-}
-);
+});
+
+export const fetch = createAsyncThunk('user/fetch', async ({ role, email, credentials }, { rejectWithValue }) => {
+    try {
+        const data = await fetchUser(role, email, credentials);
+        console.log(data);
+        return data;
+    } catch (error) {return rejectWithValue({
+            status: error?.response?.status,
+            message: error?.response?.data || error.message || 'Login Failed'
+        });
+    }
+});
 
 const storedToken = storage.get('token');
 
