@@ -14,9 +14,12 @@ const StaffCard = ({ staff, onClick }) => {
                 <h3 className="staff-card__name">{staff.name}</h3>
                 <p className="staff-card__department">{staff.department}</p>
                 <div className="staff-card__roles">
-                    {staff.roles.map((role, i) => (
-                        <span key={i} className="staff-card__role-tag">{role}</span>
-                    ))}
+                    {staff.title && (
+                        <span className="staff-card__role-tag">{staff.title}</span>
+                    )}
+                    {staff.officeLocation && (
+                        <span className="staff-card__role-tag">{staff.officeLocation}</span>
+                    )}
                 </div>
             </div>
         </div>

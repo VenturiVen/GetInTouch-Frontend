@@ -7,10 +7,8 @@ const isExpired = (date, endTime) => {
 
 const BookedSlotCard = ({ booking, onDelete }) => {
     const initials = booking.studentName
-        .split(' ')
-        .map(n => n[0])
-        .slice(0, 2)
-        .join('');
+        ? booking.studentName.split(' ').map(n => n[0]).slice(0, 2).join('')
+        : '?';
 
     const expired = isExpired(booking.date, booking.endTime);
 
@@ -29,9 +27,13 @@ const BookedSlotCard = ({ booking, onDelete }) => {
             <div className="booked-slot-card__student">
                 <div className="booked-slot-card__avatar">{initials}</div>
                 <div className="booked-slot-card__student-info">
-                    <p className="booked-slot-card__student-name">{booking.studentName}</p>
-                    <p className="booked-slot-card__student-meta">{booking.course} · Year {booking.year}</p>
-                    <p className="booked-slot-card__note">"{booking.note}"</p>
+                    <p className="booked-slot-card__student-name">{booking.studentName ?? 'Student'}</p>
+                    {booking.course && (
+                        <p className="booked-slot-card__student-meta">{booking.course} · Year {booking.year}</p>
+                    )}
+                    {booking.note && (
+                        <p className="booked-slot-card__note">"{booking.note}"</p>
+                    )}
                 </div>
             </div>
 

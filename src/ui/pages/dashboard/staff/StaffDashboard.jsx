@@ -1,46 +1,96 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SlotCard from '../../../components/SlotCard/SlotCard';
 import BookedSlotCard from '../../../components/BookedSlotCard/BookedSlotCard';
 import CreateSlotModal from '../../../components/CreateSlotModal/CreateSlotModal';
+import EditSlotModal from '../../../components/EditSlotModal/EditSlotModal';
+import API from '../../../../infra/api/axios';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY } from '../../../../repo/constants/apiEndpoints';
+import { useUser } from '../../../../service/user/useUser';
 import './StaffDashboard.scss';
 
-// TODO: replace with API call to GET /api/slots when backend is ready
-const mockSlots = [
-    { id: 1, date: 'Monday, 6 Apr 2026', startTime: '09:00', endTime: '09:30' },
-    { id: 2, date: 'Monday, 6 Apr 2026', startTime: '10:00', endTime: '10:30' },
-    { id: 3, date: 'Tuesday, 7 Apr 2026', startTime: '14:00', endTime: '14:30' },
-    { id: 4, date: 'Wednesday, 8 Apr 2026', startTime: '11:00', endTime: '11:30' },
-];
 
-// TODO: replace with API call to GET /api/slots?status=booked when backend is ready
-const mockBookedSlots = [
-    { id: 10, date: 'Monday, 6 Apr 2026', startTime: '11:00', endTime: '11:30', studentName: 'John Byrne', course: 'Computer Science', year: 4, note: 'I would like to discuss my CS4135 project.' },
-    { id: 11, date: 'Tuesday, 7 Apr 2026', startTime: '10:00', endTime: '10:30', studentName: 'Sarah Lynch', course: 'Computer Science', year: 3, note: 'Need help understanding the last lecture on microservices.' },
-    { id: 12, date: 'Wednesday, 8 Apr 2026', startTime: '14:00', endTime: '14:30', studentName: 'Cian Murphy', course: 'Computer Science', year: 4, note: 'Final year project feedback session.' },
-];
-
-let nextId = mockSlots.length + 1;
+const transformSlots = (apiSlots) => apiSlots.map(s => ({
+    id: s.id,
+    availabilityId: s.availabilityId,
+    date: new Date(s.startTime).toLocaleDateString('en-IE', {
+        weekday: 'long', day: 'numeric', month: 'short', year: 'numeric',
+    }),
+    startTime: new Date(s.startTime).toLocaleTimeString('en-IE', {
+        hour: '2-digit', minute: '2-digit', hour12: false,
+    }),
+    endTime: new Date(s.endTime).toLocaleTimeString('en-IE', {
+        hour: '2-digit', minute: '2-digit', hour12: false,
+    }),
+}));
 
 const StaffDashboard = () => {
+    const { currentUser } = useUser();
     const [activeTab, setActiveTab] = useState('available');
-    const [slots, setSlots] = useState(mockSlots);
-    const [bookedSlots, setBookedSlots] = useState(mockBookedSlots);
-
-    const handleDeleteBooked = (slotId) => {
-        // TODO: call DELETE /api/slots/:id when backend is ready
-        setBookedSlots(prev => prev.filter(s => s.id !== slotId));
-    };
+    const [staffId, setStaffId] = useState(null);
+    const [slots, setSlots] = useState([]);
+    const [bookedSlots, setBookedSlots] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [editingSlot, setEditingSlot] = useState(null);
+
+    // Step 1: find the logged-in staff member's ID by matching email from JWT
+    useEffect(() => {
+        if (!currentUser?.sub) return;
+        API.get(GET_ALL_STAFF)
+            .then(r => {
+                const me = r.data.find(s => s.email === currentUser.sub);
+                if (me) setStaffId(me.id);
+            })
+            .catch(err => console.error('Failed to fetch staff list:', err));
+    }, [currentUser]);
+
+    // Step 2: once we have the staffId, load timeslots
+    useEffect(() => {
+        if (!staffId) return;
+        refreshSlots();
+    }, [staffId]);
+
+    const refreshSlots = () => {
+        if (!staffId) return;
+        API.get(GET_STAFF_TIMESLOTS(staffId))
+            .then(r => {
+                setSlots(transformSlots(r.data.filter(s => !s.booked)));
+                setBookedSlots(transformSlots(r.data.filter(s => s.booked)));
+            })
+            .catch(err => console.error('Failed to fetch timeslots:', err));
+    };
 
     const handleCreate = ({ date, startTime, endTime }) => {
-        // TODO: call POST /api/slots when backend is ready
-        const newSlot = { id: nextId++, date, startTime, endTime };
-        setSlots(prev => [...prev, newSlot]);
+        if (!staffId) return;
+        const day = new Date(`${date}T00:00:00`)
+            .toLocaleDateString('en-US', { weekday: 'long' })
+            .toUpperCase();
+
+        API.post(`${CREATE_AVAILABILITY}?date=${date}`, [{
+            staffId,
+            day,
+            startTime,
+            endTime,
+            endDate: date,
+            timeSlotLength: 'PT30M',
+        }])
+            .then(() => refreshSlots())
+            .catch(err => console.error('Failed to create availability:', err));
     };
 
-    const handleDelete = (slotId) => {
-        // TODO: call DELETE /api/slots/:id when backend is ready
-        setSlots(prev => prev.filter(s => s.id !== slotId));
+    const handleDelete = (slot) => {
+        API.delete(DELETE_AVAILABILITY(slot.availabilityId))
+            .then(() => setSlots(prev => prev.filter(s => s.availabilityId !== slot.availabilityId)))
+            .catch(err => console.error('Failed to delete availability:', err));
+    };
+
+    const handleEdit = (slotId, { date, startTime, endTime }) => {
+        // TODO: call PUT /api/Availability/:availabilityId when wired to backend
+        setSlots(prev => prev.map(s => s.id === slotId ? { ...s, date, startTime, endTime } : s));
+    };
+
+    const handleDeleteBooked = (slotId) => {
+        // TODO: call DELETE /api/meetings/:id when backend builds the Meeting controller
+        setBookedSlots(prev => prev.filter(s => s.id !== slotId));
     };
 
     return (
@@ -58,7 +108,7 @@ const StaffDashboard = () => {
                     </button>
                     <button
                         className={`staff-dashboard__tab ${activeTab === 'booked' ? 'staff-dashboard__tab--active' : ''}`}
-                        onClick={() => setActiveTab('booked')}
+                        onClick={() => { setActiveTab('booked'); refreshSlots(); }}
                     >
                         Booked Slots
                         {bookedSlots.length > 0 && (
@@ -82,7 +132,7 @@ const StaffDashboard = () => {
                         {slots.length > 0 ? (
                             <div className="staff-dashboard__grid">
                                 {slots.map(slot => (
-                                    <SlotCard key={slot.id} slot={slot} onDelete={handleDelete} />
+                                    <SlotCard key={slot.id} slot={slot} onDelete={handleDelete} onEdit={setEditingSlot} />
                                 ))}
                             </div>
                         ) : (
@@ -114,6 +164,14 @@ const StaffDashboard = () => {
                 <CreateSlotModal
                     onClose={() => setShowCreateModal(false)}
                     onCreate={handleCreate}
+                />
+            )}
+
+            {editingSlot && (
+                <EditSlotModal
+                    slot={editingSlot}
+                    onClose={() => setEditingSlot(null)}
+                    onEdit={handleEdit}
                 />
             )}
         </>

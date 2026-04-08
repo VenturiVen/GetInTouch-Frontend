@@ -1,4 +1,4 @@
-.booking-modal {
+.edit-slot-modal {
     background-color: #1c1f1c;
     border: 1px solid #262a26;
     border-radius: 16px;
@@ -16,7 +16,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 300;
+        z-index: 200;
         padding: 24px;
     }
 
@@ -47,32 +47,25 @@
         }
     }
 
-    &__details {
-        background-color: #262a26;
-        border-radius: 8px;
-        padding: 16px;
+    &__fields {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__row {
+        display: flex;
+        gap: 16px;
+
+        .edit-slot-modal__field {
+            flex: 1;
+        }
+    }
+
+    &__field {
         display: flex;
         flex-direction: column;
         gap: 4px;
-    }
-
-    &__staff {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #e6f4ea;
-        margin: 0;
-    }
-
-    &__slot {
-        font-size: 0.875rem;
-        color: #6fdc8c;
-        margin: 0;
-    }
-
-    &__note-section {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
     }
 
     &__label {
@@ -80,20 +73,17 @@
         color: #b5b5b5;
     }
 
-    &__textarea {
+    &__input {
         background-color: #262a26;
         border: 1px solid #262a26;
         border-radius: 8px;
         color: #e6f4ea;
         font-size: 0.875rem;
-        font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-        padding: 16px;
-        resize: vertical;
+        padding: 8px 16px;
         transition: border-color 0.2s ease;
-
-        &::placeholder {
-            color: #b5b5b5;
-        }
+        width: 100%;
+        box-sizing: border-box;
+        color-scheme: dark;
 
         &:focus {
             outline: none;
@@ -129,7 +119,7 @@
         }
     }
 
-    &__confirm-btn {
+    &__save-btn {
         background-color: #048524;
         color: #ffffff;
         border: none;
