@@ -1,5 +1,8 @@
 import API from '../../infra/api/axios'
-import { LOGIN, REGISTER_STUDENT, REGISTER_STAFF, REGISTER_ADMIN } from '../../repo/constants/apiEndpoints';
+import { LOGIN,
+    REGISTER_STUDENT, REGISTER_STAFF, REGISTER_ADMIN,
+    GET_USER_INFO_BY_EMAIL, GET_STUDENT_INFO_BY_ID, GET_STAFF_INFO_BY_ID
+} from '../../repo/constants/apiEndpoints';
 
 export async function loginUser(credentials) {
     const res = await API.post(LOGIN, credentials);
@@ -19,24 +22,34 @@ export async function registerUser(role, credentials) {
     return res.data;
 }
 
-export async function fetchUser(role, credentials) {
-    role = role?.replace('ROLE_', '');
+export async function getUser(role, email) {
+    const endpoint = GET_USER_INFO_BY_EMAIL(email);
+    console.log("Calling endpoint:", endpoint)
+
+    const id = await API.get(endpoint);
+
+    console.log("id: ", id.data)
+    console.log("id num: ", id.data.id)
+
+    const res = getUserRoleInfo(role, id.data.id)
+    
+    return res;
+}
+
+export async function getUserRoleInfo(role, id) {
     const endpointMap = {
-        STUDENT: '/api/student/me',
-        STAFF: '/api/staff/me',
-        ADMIN: '/api/admin/me',
+        STUDENT: GET_STUDENT_INFO_BY_ID,
+        STAFF: GET_STAFF_INFO_BY_ID,
+        ADMIN: REGISTER_ADMIN,
     };
 
-    const endpoint = endpointMap[role];
+    const endpoint = endpointMap[role](id);
 
-    console.log("Calling endpoint:", endpoint, credentials)
-    console.log("Token: ", credentials)
+    console.log("Calling endpoint: ", endpoint)
 
-    const res = await API.get(endpoint, {
-        headers: {
-            Authorization: `Bearer ${credentials}`
-        }
-    });
+    const res = await API.get(endpoint);
 
+    console.log("User:", res.data);
+    
     return res.data;
 }

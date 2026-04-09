@@ -35,7 +35,7 @@ export const storage = {
         try {
             localStorage.clear();
         } catch (err) {
-            console.error("Localstorage rror:", err);
+            console.error("Localstorage error:", err);
         }
     },
 

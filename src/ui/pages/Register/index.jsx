@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { register, clearError } from '../../../service/user/userSlice'
+import { registerUserThunk, clearError } from '../../../service/user/userSlice'
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const Register = () => {
                 setFormError("Please fill in all fields.");
                 return;
             }
-            resultAction = await dispatch(register({
+            resultAction = await dispatch(registerUserThunk({
                 role: role,
                 credentials: {
                     name: name,
@@ -88,7 +88,7 @@ const Register = () => {
                 setFormError("Please fill in all fields.");
                 return;
             }
-            resultAction = await dispatch(register({
+            resultAction = await dispatch(registerUserThunk({
                 role: role,
                 credentials: {
                     name: name,
@@ -105,7 +105,7 @@ const Register = () => {
                 setFormError("Please fill in all fields.");
                 return;
             }
-            resultAction = await dispatch(register({
+            resultAction = await dispatch(registerUserThunk({
                 role: role,
                 credentials: {
                     name: name,
@@ -119,7 +119,7 @@ const Register = () => {
             }));
         }
 
-        if (register.fulfilled.match(resultAction)) {
+        if (registerUserThunk.fulfilled.match(resultAction)) {
             setFormError("Login Success!")
             setIsSuccess(true);
             navigate('/login');

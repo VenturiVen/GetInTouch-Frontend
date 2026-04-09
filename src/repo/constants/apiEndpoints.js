@@ -10,6 +10,14 @@ export const GET_USERS = '/api/users';
 export const CREATE_USER = '/api/users';
 export const DELETE_USER = (id) => `/api/users/${id}`;
 
+// Users
+export const GET_USER_INFO_BY_EMAIL = (email) => `/api/user/email/${encodeURIComponent(email)}`;
+export const GET_USER_INFO_BY_ID = (id) => `/api/user/id/${id}`;
+
+// 'me'
+export const GET_STAFF_INFO_BY_ID = (id) => `/api/staff/me/${id}`;
+export const GET_STUDENT_INFO_BY_ID = (id) => `/api/student/me/${id}`
+
 // Slots (Staff)
 export const GET_SLOTS = '/api/slots';
 export const CREATE_SLOT = '/api/slots';
