@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import API from '../../../infra/api/axios';
+import { BOOK_TIMESLOT } from '../../../repo/constants/apiEndpoints';
 import './BookingModal.scss';
 
 const BookingModal = ({ staff, slot, onClose, onConfirm }) => {
     const [note, setNote] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     if (!staff || !slot) return null;
 
@@ -11,8 +15,17 @@ const BookingModal = ({ staff, slot, onClose, onConfirm }) => {
     };
 
     const handleConfirm = () => {
-        // TODO: call POST /api/bookings with { staffId: staff.id, slotId: slot.id, note } when backend is ready
-        onConfirm({ staff, slot, note });
+        setLoading(true);
+        setError(null);
+        API.patch(BOOK_TIMESLOT(slot.id))
+            .then(() => {
+                onConfirm({ staff, slot, note });
+            })
+            .catch(err => {
+                console.error('Failed to book slot:', err);
+                setError('Failed to book slot. Please try again.');
+            })
+            .finally(() => setLoading(false));
     };
 
     return (
@@ -42,6 +55,8 @@ const BookingModal = ({ staff, slot, onClose, onConfirm }) => {
                     />
                 </div>
 
+                {error && <p className="booking-modal__error">{error}</p>}
+
                 <div className="booking-modal__actions">
                     <button className="booking-modal__cancel-btn" onClick={onClose}>
                         Cancel
@@ -49,9 +64,9 @@ const BookingModal = ({ staff, slot, onClose, onConfirm }) => {
                     <button
                         className="booking-modal__confirm-btn"
                         onClick={handleConfirm}
-                        disabled={note.trim() === ''}
+                        disabled={note.trim() === '' || loading}
                     >
-                        Confirm Booking
+                        {loading ? 'Booking...' : 'Confirm Booking'}
                     </button>
                 </div>
             </div>

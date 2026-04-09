@@ -1,42 +1,51 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
 import BookingModal from '../../../components/BookingModal/BookingModal';
+import API from '../../../../infra/api/axios';
+import { GET_ALL_STAFF } from '../../../../repo/constants/apiEndpoints';
 import './StudentDashboard.scss';
 
-// TODO: replace with API call to GET /api/staff when backend is ready
-const mockStaff = [
-    { id: 1, name: 'Dr. Alice Murphy', department: 'Computer Science', roles: ['CS4135 Software Architecture', 'CS4001 Programming'] },
-    { id: 2, name: 'Prof. Brian Kelly', department: 'Mathematics', roles: ['MA4001 Calculus', 'MA4002 Statistics'] },
-    { id: 3, name: 'Dr. Sarah Connolly', department: 'Student Support', roles: ['Academic Advisor', 'Wellbeing'] },
-    { id: 4, name: 'Dr. James O\'Connor', department: 'Computer Science', roles: ['CS3421 Databases', 'CS4135 Software Architecture'] },
-    { id: 5, name: 'Ms. Emma Walsh', department: 'Student Affairs', roles: ['Counselling', 'Student Support'] },
-    { id: 6, name: 'Dr. Patrick Ryan', department: 'Physics', roles: ['PH4001 Mechanics', 'PH4002 Thermodynamics'] },
-];
+const BOOKINGS_KEY = 'student_bookings';
 
-// TODO: replace with API call to GET /api/bookings when backend is ready
-// Mock bookings: sorted by closest date first
-const mockBookings = [
-    { id: 1, staffName: 'Dr. Alice Murphy', department: 'Computer Science', date: 'Monday, 10 Apr 2026', startTime: '09:00', endTime: '09:30', note: 'I would like to discuss my CS4135 project architecture.' },
-    { id: 2, staffName: 'Dr. Sarah Connolly', department: 'Student Support', date: 'Tuesday, 8 Apr 2026', startTime: '14:00', endTime: '14:30', note: 'Looking for academic advice regarding my course load.' },
-    { id: 3, staffName: 'Prof. Brian Kelly', department: 'Mathematics', date: 'Wednesday, 9 Apr 2026', startTime: '11:00', endTime: '11:30', note: 'Need help understanding the last statistics lecture.' },
-];
+const loadBookings = () => {
+    try {
+        const stored = localStorage.getItem(BOOKINGS_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
+};
+
+const saveBookings = (bookings) => {
+    localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+};
 
 const StudentDashboard = () => {
     const [activeTab, setActiveTab] = useState('directory');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStaff, setSelectedStaff] = useState(null);
     const [bookingData, setBookingData] = useState(null);
-    const [bookings, setBookings] = useState(
-        [...mockBookings].sort((a, b) => new Date(a.date) - new Date(b.date))
+    const [bookings, setBookings] = useState(() =>
+        [...loadBookings()].sort((a, b) => new Date(a.date) - new Date(b.date))
     );
+    const [staff, setStaff] = useState([]);
+    const [staffLoading, setStaffLoading] = useState(true);
 
-    const filteredStaff = mockStaff.filter(staff => {
+    useEffect(() => {
+        API.get(GET_ALL_STAFF)
+            .then(r => setStaff(r.data))
+            .catch(() => setStaff([]))
+            .finally(() => setStaffLoading(false));
+    }, []);
+
+    const filteredStaff = staff.filter(staff => {
         const term = searchTerm.toLowerCase();
         return (
             staff.name.toLowerCase().includes(term) ||
             staff.department.toLowerCase().includes(term) ||
-            staff.roles.some(role => role.toLowerCase().includes(term))
+            staff.title?.toLowerCase().includes(term) ||
+            staff.officeLocation?.toLowerCase().includes(term)
         );
     });
 
@@ -48,18 +57,28 @@ const StudentDashboard = () => {
         setBookingData({ staff, slot });
     };
 
-    const handleConfirm = (booking) => {
-        // TODO: call POST /api/bookings when backend is ready
-        console.log('Booking confirmed:', booking);
+    const handleConfirm = ({ staff, slot, note }) => {
+        const newBooking = {
+            id: slot.id,
+            staffName: staff.name,
+            department: staff.department,
+            date: slot.date,
+            startTime: slot.startTime,
+            endTime: slot.endTime,
+            note,
+        };
+        const updated = [...bookings, newBooking].sort((a, b) => new Date(a.date) - new Date(b.date));
+        setBookings(updated);
+        saveBookings(updated);
         setBookingData(null);
         setSelectedStaff(null);
     };
 
     const handleCancelBooking = (bookingId) => {
-        // TODO: call DELETE /api/bookings/:id when backend is ready
-        setBookings(prev =>
-            prev.filter(b => b.id !== bookingId).sort((a, b) => new Date(a.date) - new Date(b.date))
-        );
+        // TODO: call PATCH /api/timeslots/free/:id when backend Meeting API is ready
+        const updated = bookings.filter(b => b.id !== bookingId);
+        setBookings(updated);
+        saveBookings(updated);
     };
 
     return (
@@ -90,20 +109,24 @@ const StudentDashboard = () => {
                             <input
                                 className="student-dashboard__search"
                                 type="text"
-                                placeholder="Search by name, department or module..."
+                                placeholder="Search by name, department or title..."
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
                         </div>
 
-                        {filteredStaff.length > 0 ? (
+                        {staffLoading && (
+                            <p className="student-dashboard__empty">Loading staff...</p>
+                        )}
+
+                        {!staffLoading && filteredStaff.length > 0 ? (
                             <div className="student-dashboard__grid">
-                                {filteredStaff.map(staff => (
-                                    <StaffCard key={staff.id} staff={staff} onClick={handleStaffClick} />
+                                {filteredStaff.map(s => (
+                                    <StaffCard key={s.id} staff={s} onClick={handleStaffClick} />
                                 ))}
                             </div>
                         ) : (
-                            <p className="student-dashboard__empty">No staff members found.</p>
+                            !staffLoading && <p className="student-dashboard__empty">No staff members found.</p>
                         )}
                     </>
                 )}
