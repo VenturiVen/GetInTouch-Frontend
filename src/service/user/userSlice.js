@@ -30,15 +30,10 @@ export const registerUserThunk = createAsyncThunk('user/register', async ({ role
 
 export const getUserThunk = createAsyncThunk('user/email', async (_, { rejectWithValue }) => {
     try {
-        const token = storage.get('token');
-        console.log(token);
-        const decoded = decodeToken(token);
+        const decoded = decodeToken(storage.get('token'));
         const email = decoded?.sub;
         const role = decoded?.role?.replace('ROLE_', '');
-        console.log(email);
-        console.log(role);
         const data = await getUser(role, email);
-        console.log(data);
         return data;
     } catch (error) {return rejectWithValue({
             status: error?.response?.status,

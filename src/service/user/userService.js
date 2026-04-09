@@ -24,12 +24,8 @@ export async function registerUser(role, credentials) {
 
 export async function getUser(role, email) {
     const endpoint = GET_USER_INFO_BY_EMAIL(email);
-    console.log("Calling endpoint:", endpoint)
 
     const id = await API.get(endpoint);
-
-    console.log("id: ", id.data)
-    console.log("id num: ", id.data.id)
 
     const res = getUserRoleInfo(role, id.data.id)
     
@@ -45,11 +41,7 @@ export async function getUserRoleInfo(role, id) {
 
     const endpoint = endpointMap[role](id);
 
-    console.log("Calling endpoint: ", endpoint)
-
     const res = await API.get(endpoint);
-
-    console.log("User:", res.data);
     
     return res.data;
 }

@@ -20,40 +20,16 @@ const Account = () => {
     const [formError, setFormError] = useState('');
     const roleName = currentUser?.role?.replace('ROLE_', '');
 
-    const getErrorMessage = (error) => {
-        if (!error) return "";
-
-        if (!error.status) {
-            return "Unable to connect to server.";
-        }
-
-        switch (error.status) {
-            case 401:
-                return "Session expired. Please log in again.";
-            case 403:
-                return "You don't have permission to access this.";
-            case 404:
-                return "User not found.";
-            case 500:
-                return "Server error occurred.";
-            default:
-                return error.message || "Failed to load user account data.";
-        }
-    };
-
     useEffect(() => {
         const loadUser = async () => {
-            console.log("token: ", token);
             dispatch(clearError());
             setFormError('');
-            console.log("running loaduser");
             if (token) {
                 const resultAction = await dispatch(getUserThunk());
-                console.log("token OK!");
                 if (getUserThunk.fulfilled.match(resultAction)) {
-                    console.log("thunk: ", resultAction.payload);
                     setProfile(resultAction.payload);
                 } else {
+                    navigate('/');
                     console.log(resultAction.payload);
                 }
             }
