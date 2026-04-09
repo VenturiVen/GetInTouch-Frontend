@@ -10,6 +10,20 @@ export const GET_STAFF_BY_ID = (id) => `/api/staff/id/${id}`;
 export const GET_MY_DEPARTMENT_STAFF = '/api/staff/my-department';
 export const GET_DEPARTMENT_STAFF = (department) => `/api/staff/department/${department}`;
 
+// Users
+export const GET_USER_INFO_BY_EMAIL = (email) => `/api/user/email/${encodeURIComponent(email)}`;
+export const GET_USER_INFO_BY_ID = (id) => `/api/user/id/${id}`;
+
+// 'me'
+export const GET_STAFF_INFO_BY_ID = (id) => `/api/staff/me/${id}`;
+export const GET_STUDENT_INFO_BY_ID = (id) => `/api/student/me/${id}`
+
+// Slots (Staff)
+export const GET_SLOTS = '/api/slots';
+export const CREATE_SLOT = '/api/slots';
+export const UPDATE_SLOT = (id) => `/api/slots/${id}`;
+export const DELETE_SLOT = (id) => `/api/slots/${id}`;
+
 // Availability (staff sets recurring schedules → generates time slots)
 export const GET_AVAILABILITY_BY_STAFF = (staffId) => `/api/Availability/staff/${staffId}`;
 export const CREATE_AVAILABILITY = '/api/Availability/';

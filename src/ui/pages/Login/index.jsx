@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { login, clearError } from '../../../service/user/userSlice'
+import { loginUserThunk, clearError } from '../../../service/user/userSlice'
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -44,9 +44,9 @@ const Login = () => {
             return;
         }
 
-        const resultAction = await dispatch(login({ email, password }));
+        const resultAction = await dispatch(loginUserThunk({ email, password }));
 
-        if (login.fulfilled.match(resultAction)) {
+        if (loginUserThunk.fulfilled.match(resultAction)) {
             setFormError("Login Success!")
             setIsSuccess(true);
             navigate('/')

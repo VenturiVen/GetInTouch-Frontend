@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from "../../../service/user/userSlice";
 
 import './index.scss';
 
@@ -44,15 +43,12 @@ const NavBar = () => {
                             Login
                         </NavLink>
                     ) : (
-                        <button
-                            className="logout-btn"
-                            onClick={() => {
-                                dispatch(logout());
-                                navigate('/');
-                            }}
+                        <NavLink
+                            to="/account"
+                            className={({ isActive }) => (isActive ? "active" : "")}
                         >
-                            Logout
-                        </button>
+                            Account
+                        </NavLink>
                     )}
                 </nav>
             </div>

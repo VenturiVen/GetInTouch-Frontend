@@ -4,9 +4,6 @@ import { Navigate } from "react-router-dom";
 const DashboardRouter = () => {
     const { token, role } = useSelector((state) => state.user);
 
-    console.log("TOKEN:", token);
-    console.log("ROLE:", role);
-
     if (!token) {
         return <Navigate to="/login" />;
     }

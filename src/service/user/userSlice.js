@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser } from './userService';
+import { loginUser, registerUser, getUser } from './userService';
 import { decodeToken, isTokenExpired } from '../../infra/auth/token'
 import { storage } from '../../infra/storage/localStorage'
 
 // runs async API call
-export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
+export const loginUserThunk = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
     try {
         const data = await loginUser(credentials);
         return data;
@@ -16,7 +16,7 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
     }
 });
 
-export const register = createAsyncThunk('user/register', async ({ role, credentials }, { rejectWithValue }) => {
+export const registerUserThunk = createAsyncThunk('user/register', async ({ role, credentials }, { rejectWithValue }) => {
     try {
         const data = await registerUser(role, credentials);
         return data;
@@ -26,8 +26,21 @@ export const register = createAsyncThunk('user/register', async ({ role, credent
             message: error?.response?.data || error.message || 'Login Failed'
         });
     }
-}
-);
+});
+
+export const getUserThunk = createAsyncThunk('user/email', async (_, { rejectWithValue }) => {
+    try {
+        const decoded = decodeToken(storage.get('token'));
+        const email = decoded?.sub;
+        const role = decoded?.role?.replace('ROLE_', '');
+        const data = await getUser(role, email);
+        return data;
+    } catch (error) {return rejectWithValue({
+            status: error?.response?.status,
+            message: error?.response?.data || error.message || 'Login Failed'
+        });
+    }
+});
 
 const storedToken = storage.get('token');
 
@@ -70,11 +83,11 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(login.pending, (state) => {
+            .addCase(loginUserThunk.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(login.fulfilled, (state, action) => {
+            .addCase(loginUserThunk.fulfilled, (state, action) => {
                 state.loading = false;
 
                 const token = action.payload?.accessToken;
@@ -95,19 +108,19 @@ const userSlice = createSlice({
                     storage.set('role', roleName);
                 }
             })
-            .addCase(login.rejected, (state, action) => {
+            .addCase(loginUserThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(register.pending, (state) => {
+            .addCase(registerUserThunk.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(register.fulfilled, (state, action) => {
+            .addCase(registerUserThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
             })
-            .addCase(register.rejected, (state, action) => {
+            .addCase(registerUserThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
