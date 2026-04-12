@@ -43,21 +43,23 @@ const StaffDashboard = () => {
             .catch(err => console.error('Failed to fetch staff list:', err));
     }, [currentUser]);
 
-    // Step 2: once we have the staffId, load timeslots
-    useEffect(() => {
-        if (!staffId) return;
-        refreshSlots();
-    }, [staffId]);
-
-    const refreshSlots = () => {
-        if (!staffId) return;
-        API.get(GET_STAFF_TIMESLOTS(staffId))
+    const refreshSlots = (id) => {
+        const resolvedId = id ?? staffId;
+        if (!resolvedId) return;
+        API.get(GET_STAFF_TIMESLOTS(resolvedId))
             .then(r => {
-                setSlots(transformSlots(r.data.filter(s => !s.booked)));
+                const now = new Date();
+                setSlots(transformSlots(r.data.filter(s => !s.booked && new Date(s.endTime) > now)));
                 setBookedSlots(transformSlots(r.data.filter(s => s.booked)));
             })
             .catch(err => console.error('Failed to fetch timeslots:', err));
     };
+
+    // Step 2: once we have the staffId, load timeslots
+    useEffect(() => {
+        if (!staffId) return;
+        refreshSlots(staffId);
+    }, [staffId]);
 
     const handleCreate = ({ date, startTime, endTime }) => {
         if (!staffId) return;
@@ -88,9 +90,10 @@ const StaffDashboard = () => {
         setSlots(prev => prev.map(s => s.id === slotId ? { ...s, date, startTime, endTime } : s));
     };
 
-    const handleDeleteBooked = (slotId) => {
-        // TODO: call DELETE /api/meetings/:id when backend builds the Meeting controller
-        setBookedSlots(prev => prev.filter(s => s.id !== slotId));
+    const handleDeleteBooked = (slot) => {
+        API.delete(DELETE_AVAILABILITY(slot.availabilityId))
+            .then(() => setBookedSlots(prev => prev.filter(s => s.id !== slot.id)))
+            .catch(err => console.error('Failed to remove booked slot:', err));
     };
 
     return (

@@ -4,51 +4,87 @@
     position: fixed;
     top: 0;
     width: 100%;
-    height: 8rem;
+    height: 4.5rem;
     display: flex;
+    align-items: center;
     z-index: 100;
     background-color: v.$color-background-secondary;
-    justify-content: space-between;
+    border-bottom: 1px solid v.$color-background-tertiary;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
 
     .brand {
-        margin-top: 1rem;
         display: flex;
         align-items: center;
-        color: v.$color-accent-500;
-        margin-left: 4rem;
-    }
+        margin-left: 2.5rem;
+        width: 20%;
 
-    .nav-container {
-        margin-top: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: right;
-        padding: 0 4rem;
-        width: 30%;
+        h1 {
+            font-size: v.$font-size-lg;
+            font-weight: 700;
+            color: v.$color-accent-500;
+            letter-spacing: 0.02em;
+        }
     }
 
     .nav-links {
-        gap: 2rem;
-        align-items: center;
+        flex: 1;
         display: flex;
-    }
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
 
-    nav {
         a {
             display: inline-block;
-            font-weight: bold;
+            font-weight: 400;
             font-size: 2rem;
-            color: v.$color-text-primary;
+            color: v.$color-text-secondary;
             text-decoration: none;
-            transition: transform v.$transition-fast, color v.$transition-medium;
+            padding: 0.4rem 0.9rem;
+            border-radius: v.$radius-md;
+            letter-spacing: 0.03em;
+            transition: background-color v.$transition-fast, color v.$transition-fast;
 
             &:hover {
-                color: v.$color-text-secondary;
-                transform: translateY(-1px);
+                color: v.$color-text-primary;
+                background-color: v.$color-background-tertiary;
             }
 
             &:active {
-                transform: scale(0.95);
+                opacity: 0.8;
+            }
+
+            &.active {
+                color: v.$color-accent-300;
+                background-color: rgba(v.$color-accent-500, 0.12);
+                font-weight: 500;
+            }
+        }
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 20%;
+        padding-right: 2.5rem;
+
+        a {
+            font-weight: 400;
+            font-size: v.$font-size-sm;
+            color: v.$color-text-secondary;
+            text-decoration: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: v.$radius-md;
+            transition: background-color v.$transition-fast, color v.$transition-fast;
+
+            &:hover {
+                color: v.$color-text-primary;
+                background-color: v.$color-background-tertiary;
+            }
+
+            &.active {
+                color: v.$color-accent-300;
+                background-color: rgba(v.$color-accent-500, 0.12);
             }
         }
     }
@@ -56,19 +92,21 @@
     .logout-btn {
         background: none;
         border: none;
-        font-weight: bold;
-        font-size: 2rem;
-        color: v.$color-text-primary;
         cursor: pointer;
-        transition: transform v.$transition-fast, color v.$transition-medium;
+        font-weight: 400;
+        font-size: v.$font-size-sm;
+        color: v.$color-error;
+        padding: 0.4rem 0.9rem;
+        border-radius: v.$radius-md;
+        letter-spacing: 0.03em;
+        transition: background-color v.$transition-fast, color v.$transition-fast;
 
         &:hover {
-            color: v.$color-text-secondary;
-            transform: translateY(-1px);
+            background-color: rgba(v.$color-error, 0.1);
         }
 
         &:active {
-            transform: scale(0.95);
+            opacity: 0.8;
         }
     }
 }

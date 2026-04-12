@@ -40,7 +40,7 @@ const BookedSlotCard = ({ booking, onDelete }) => {
             {expired && (
                 <button
                     className="booked-slot-card__delete-btn"
-                    onClick={() => onDelete(booking.id)}
+                    onClick={() => onDelete(booking)}
                 >
                     Remove
                 </button>

@@ -17,7 +17,7 @@ const BookingModal = ({ staff, slot, onClose, onConfirm }) => {
     const handleConfirm = () => {
         setLoading(true);
         setError(null);
-        API.patch(BOOK_TIMESLOT(slot.id))
+        API.patch(BOOK_TIMESLOT(slot.id), { note })
             .then(() => {
                 onConfirm({ staff, slot, note });
             })
