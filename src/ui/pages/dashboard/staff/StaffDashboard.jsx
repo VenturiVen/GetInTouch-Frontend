@@ -12,6 +12,8 @@ import './StaffDashboard.scss';
 const transformSlots = (apiSlots) => apiSlots.map(s => ({
     id: s.id,
     availabilityId: s.availabilityId,
+    rawStartTime: s.startTime,
+    rawEndTime: s.endTime,
     date: new Date(s.startTime).toLocaleDateString('en-IE', {
         weekday: 'long', day: 'numeric', month: 'short', year: 'numeric',
     }),
@@ -21,6 +23,10 @@ const transformSlots = (apiSlots) => apiSlots.map(s => ({
     endTime: new Date(s.endTime).toLocaleTimeString('en-IE', {
         hour: '2-digit', minute: '2-digit', hour12: false,
     }),
+    studentId: s.studentId,
+    studentName: s.studentName,
+    studentEmail: s.studentEmail,
+    note: s.note,
 }));
 
 const StaffDashboard = () => {
@@ -50,7 +56,8 @@ const StaffDashboard = () => {
             .then(r => {
                 const now = new Date();
                 setSlots(transformSlots(r.data.filter(s => !s.booked && new Date(s.endTime) > now)));
-                setBookedSlots(transformSlots(r.data.filter(s => s.booked)));
+                const sorted = [...r.data.filter(s => s.booked)].sort((a, b) => a.startTime < b.startTime ? -1 : 1);
+                setBookedSlots(transformSlots(sorted));
             })
             .catch(err => console.error('Failed to fetch timeslots:', err));
     };
@@ -60,6 +67,24 @@ const StaffDashboard = () => {
         if (!staffId) return;
         refreshSlots(staffId);
     }, [staffId]);
+
+    // Auto-remove expired slots every 30 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const now = new Date();
+            setSlots(prev => {
+                const expired = prev.filter(s => new Date(s.rawStartTime) <= now);
+                expired.forEach(s => API.delete(DELETE_AVAILABILITY(s.availabilityId)).catch(() => {}));
+                return prev.filter(s => new Date(s.rawStartTime) > now);
+            });
+            setBookedSlots(prev => {
+                const expired = prev.filter(s => new Date(s.rawEndTime) <= now);
+                expired.forEach(s => API.delete(DELETE_AVAILABILITY(s.availabilityId)).catch(() => {}));
+                return prev.filter(s => new Date(s.rawEndTime) > now);
+            });
+        }, 30000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handleCreate = ({ date, startTime, endTime }) => {
         if (!staffId) return;

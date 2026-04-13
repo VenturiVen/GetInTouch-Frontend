@@ -1,25 +1,18 @@
 import './BookedSlotCard.scss';
 
-const isExpired = (date, endTime) => {
-    const slotEnd = new Date(`${date} ${endTime}`);
-    return slotEnd < new Date();
-};
-
 const BookedSlotCard = ({ booking, onDelete }) => {
     const initials = booking.studentName
         ? booking.studentName.split(' ').map(n => n[0]).slice(0, 2).join('')
         : '?';
 
-    const expired = isExpired(booking.date, booking.endTime);
+    const expired = new Date(booking.rawEndTime) <= new Date();
 
     return (
         <div className={`booked-slot-card ${expired ? 'booked-slot-card--expired' : ''}`}>
             <div className="booked-slot-card__time-block">
                 <p className="booked-slot-card__date">{booking.date}</p>
                 <p className="booked-slot-card__time">{booking.startTime} – {booking.endTime}</p>
-                {expired && (
-                    <span className="booked-slot-card__badge">Expired</span>
-                )}
+                {expired && <span className="booked-slot-card__badge">Expired</span>}
             </div>
 
             <div className="booked-slot-card__divider" />
@@ -37,14 +30,12 @@ const BookedSlotCard = ({ booking, onDelete }) => {
                 </div>
             </div>
 
-            {expired && (
-                <button
-                    className="booked-slot-card__delete-btn"
-                    onClick={() => onDelete(booking)}
-                >
-                    Remove
-                </button>
-            )}
+            <button
+                className="booked-slot-card__delete-btn"
+                onClick={() => onDelete(booking)}
+            >
+                Cancel
+            </button>
         </div>
     );
 };
