@@ -1,6 +1,6 @@
 import './BookedSlotCard.scss';
 
-const BookedSlotCard = ({ booking, onDelete, onClick }) => {
+const BookedSlotCard = ({ booking, onDelete, onClick, onMessage }) => {
     const initials = booking.studentName
         ? booking.studentName.split(' ').map(n => n[0]).slice(0, 2).join('')
         : '?';
@@ -30,6 +30,12 @@ const BookedSlotCard = ({ booking, onDelete, onClick }) => {
                 </div>
             </div>
 
+            <button
+                className="booked-slot-card__message-btn"
+                onClick={e => { e.stopPropagation(); onMessage(booking); }}
+            >
+                Message
+            </button>
             <button
                 className="booked-slot-card__delete-btn"
                 onClick={e => { e.stopPropagation(); onDelete(booking); }}

@@ -27,6 +27,11 @@ const NavBar = () => {
                         Dashboard
                     </NavLink>
                 )}
+                {token && (
+                    <NavLink to="/messages" className={({ isActive }) => isActive ? "active" : ""}>
+                        Messages
+                    </NavLink>
+                )}
             </nav>
 
             <div className="nav-right">

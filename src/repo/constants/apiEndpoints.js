@@ -35,6 +35,12 @@ export const GET_STAFF_TIMESLOTS = (staffId) => `/api/timeslots/staff/${staffId}
 export const BOOK_TIMESLOT = (slotId) => `/api/timeslots/book/${slotId}`;
 export const FREE_TIMESLOT = (slotId) => `/api/timeslots/free/${slotId}`;
 
+// Conversations & Messages
+export const CREATE_CONVERSATION = '/api/conversations';
+export const GET_CONVERSATIONS = '/api/conversations';
+export const GET_MESSAGES = (conversationId) => `/api/conversations/${conversationId}/messages`;
+export const SEND_MESSAGE = (conversationId) => `/api/conversations/${conversationId}/messages`;
+
 // Meetings/Bookings — not yet implemented in backend
 // export const GET_BOOKINGS = '/api/bookings';
 // export const CREATE_BOOKING = '/api/bookings';

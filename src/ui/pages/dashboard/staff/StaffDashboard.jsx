@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SlotCard from '../../../components/SlotCard/SlotCard';
 import BookedSlotCard from '../../../components/BookedSlotCard/BookedSlotCard';
 import CreateSlotModal from '../../../components/CreateSlotModal/CreateSlotModal';
 import EditSlotModal from '../../../components/EditSlotModal/EditSlotModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY } from '../../../../repo/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../repo/constants/apiEndpoints';
 import { useUser } from '../../../../service/user/useUser';
 import './StaffDashboard.scss';
 
@@ -31,8 +32,10 @@ const transformSlots = (apiSlots) => apiSlots.map(s => ({
 
 const StaffDashboard = () => {
     const { currentUser } = useUser();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('available');
     const [staffId, setStaffId] = useState(null);
+    const [staffName, setStaffName] = useState('');
     const [slots, setSlots] = useState([]);
     const [bookedSlots, setBookedSlots] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -45,7 +48,7 @@ const StaffDashboard = () => {
         API.get(GET_ALL_STAFF)
             .then(r => {
                 const me = r.data.find(s => s.email === currentUser.sub);
-                if (me) setStaffId(me.id);
+                if (me) { setStaffId(me.id); setStaffName(me.name); }
             })
             .catch(err => console.error('Failed to fetch staff list:', err));
     }, [currentUser]);
@@ -116,9 +119,24 @@ const StaffDashboard = () => {
         setSlots(prev => prev.map(s => s.id === slotId ? { ...s, date, startTime, endTime } : s));
     };
 
+    const handleMessage = (booking) => {
+        API.post(CREATE_CONVERSATION, { studentId: booking.studentId })
+            .then(r => navigate('/messages', { state: { conversationId: r.data.id } }))
+            .catch(err => console.error('Failed to create conversation:', err));
+    };
+
     const handleDeleteBooked = (slot) => {
         API.delete(DELETE_AVAILABILITY(slot.availabilityId))
-            .then(() => setBookedSlots(prev => prev.filter(s => s.id !== slot.id)))
+            .then(() => {
+                setBookedSlots(prev => prev.filter(s => s.id !== slot.id));
+                if (slot.studentId) {
+                    API.post(CREATE_CONVERSATION, { studentId: slot.studentId })
+                        .then(r => API.post(SEND_MESSAGE(r.data.id), {
+                            content: `Your booking on ${slot.date} from ${slot.startTime} to ${slot.endTime} has been cancelled by ${staffName || currentUser?.sub}.`
+                        }))
+                        .catch(() => {});
+                }
+            })
             .catch(err => console.error('Failed to remove booked slot:', err));
     };
 
@@ -179,7 +197,7 @@ const StaffDashboard = () => {
                         {bookedSlots.length > 0 ? (
                             <div className="staff-dashboard__list">
                                 {bookedSlots.map(booking => (
-                                    <BookedSlotCard key={booking.id} booking={booking} onDelete={handleDeleteBooked} onClick={setSelectedBooking} />
+                                    <BookedSlotCard key={booking.id} booking={booking} onDelete={handleDeleteBooked} onClick={setSelectedBooking} onMessage={handleMessage} />
                                 ))}
                             </div>
                         ) : (

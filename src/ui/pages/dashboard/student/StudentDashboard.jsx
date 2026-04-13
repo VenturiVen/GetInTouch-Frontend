@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useUser } from '../../../../service/user/useUser';
 import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
 import BookingModal from '../../../components/BookingModal/BookingModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF } from '../../../../repo/constants/apiEndpoints';
+import { GET_ALL_STAFF, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../repo/constants/apiEndpoints';
 import './StudentDashboard.scss';
 
 const BOOKINGS_KEY = 'student_bookings';
@@ -22,6 +23,7 @@ const saveBookings = (bookings) => {
 };
 
 const StudentDashboard = () => {
+    const { currentUser } = useUser();
     const [activeTab, setActiveTab] = useState('directory');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStaff, setSelectedStaff] = useState(null);
@@ -60,6 +62,7 @@ const StudentDashboard = () => {
     const handleConfirm = ({ staff, slot, note }) => {
         const newBooking = {
             id: slot.id,
+            staffId: staff.id,
             staffName: staff.name,
             department: staff.department,
             date: slot.date,
@@ -75,10 +78,18 @@ const StudentDashboard = () => {
     };
 
     const handleCancelBooking = (bookingId) => {
-        // TODO: call PATCH /api/timeslots/free/:id when backend Meeting API is ready
+        const booking = bookings.find(b => b.id === bookingId);
         const updated = bookings.filter(b => b.id !== bookingId);
         setBookings(updated);
         saveBookings(updated);
+
+        if (booking?.staffId) {
+            API.post(CREATE_CONVERSATION, { studentId: null, staffId: booking.staffId })
+                .then(r => API.post(SEND_MESSAGE(r.data.id), {
+                    content: `Your booking on ${booking.date} from ${booking.startTime} to ${booking.endTime} has been cancelled by ${currentUser?.sub ?? 'the student'}.`
+                }))
+                .catch(() => {});
+        }
     };
 
     return (

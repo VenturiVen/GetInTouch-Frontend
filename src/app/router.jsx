@@ -8,6 +8,7 @@ import AdminDashboard from "../ui/pages/dashboard/admin";
 import StaffDashboard from "../ui/pages/dashboard/staff/StaffDashboard"
 import StudentDashboard from "../ui/pages/dashboard/student/StudentDashboard";
 import DashboardRouter from "../ui/pages/dashboard/DashboardRouter";
+import MessagesPage from "../ui/pages/Messages/MessagesPage";
 
 const router = createBrowserRouter([
     {
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
             { path: "dashboard", element: <DashboardRouter /> },
             { path: "dashboard/admin", element: <AdminDashboard /> },
             { path: "dashboard/staff", element: <StaffDashboard /> },
-            { path: "dashboard/student", element: <StudentDashboard /> }
+            { path: "dashboard/student", element: <StudentDashboard /> },
+            { path: "messages", element: <MessagesPage /> },
         ],
     }
 ]);

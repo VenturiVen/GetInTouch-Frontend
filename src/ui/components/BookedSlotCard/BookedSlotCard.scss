@@ -23,6 +23,24 @@
         margin-top: 4px;
     }
 
+    &__message-btn {
+        background-color: transparent;
+        border: 1px solid #2563eb;
+        color: #2563eb;
+        border-radius: 6px;
+        padding: 16px 22px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        align-self: center;
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+    }
+
     &__delete-btn {
         background-color: transparent;
         border: 1px solid #dc2626;
