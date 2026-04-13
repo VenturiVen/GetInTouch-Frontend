@@ -1,6 +1,6 @@
 import './BookedSlotCard.scss';
 
-const BookedSlotCard = ({ booking, onDelete }) => {
+const BookedSlotCard = ({ booking, onDelete, onClick }) => {
     const initials = booking.studentName
         ? booking.studentName.split(' ').map(n => n[0]).slice(0, 2).join('')
         : '?';
@@ -8,7 +8,7 @@ const BookedSlotCard = ({ booking, onDelete }) => {
     const expired = new Date(booking.rawEndTime) <= new Date();
 
     return (
-        <div className={`booked-slot-card ${expired ? 'booked-slot-card--expired' : ''}`}>
+        <div className={`booked-slot-card ${expired ? 'booked-slot-card--expired' : ''}`} onClick={() => onClick(booking)} style={{ cursor: 'pointer' }}>
             <div className="booked-slot-card__time-block">
                 <p className="booked-slot-card__date">{booking.date}</p>
                 <p className="booked-slot-card__time">{booking.startTime} – {booking.endTime}</p>
@@ -32,7 +32,7 @@ const BookedSlotCard = ({ booking, onDelete }) => {
 
             <button
                 className="booked-slot-card__delete-btn"
-                onClick={() => onDelete(booking)}
+                onClick={e => { e.stopPropagation(); onDelete(booking); }}
             >
                 Cancel
             </button>

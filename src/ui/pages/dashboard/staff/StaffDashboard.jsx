@@ -37,6 +37,7 @@ const StaffDashboard = () => {
     const [bookedSlots, setBookedSlots] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
+    const [selectedBooking, setSelectedBooking] = useState(null);
 
     // Step 1: find the logged-in staff member's ID by matching email from JWT
     useEffect(() => {
@@ -178,7 +179,7 @@ const StaffDashboard = () => {
                         {bookedSlots.length > 0 ? (
                             <div className="staff-dashboard__list">
                                 {bookedSlots.map(booking => (
-                                    <BookedSlotCard key={booking.id} booking={booking} onDelete={handleDeleteBooked} />
+                                    <BookedSlotCard key={booking.id} booking={booking} onDelete={handleDeleteBooked} onClick={setSelectedBooking} />
                                 ))}
                             </div>
                         ) : (
@@ -201,6 +202,30 @@ const StaffDashboard = () => {
                     onClose={() => setEditingSlot(null)}
                     onEdit={handleEdit}
                 />
+            )}
+
+            {selectedBooking && (
+                <div className="booking-detail-overlay" onClick={() => setSelectedBooking(null)}>
+                    <div className="booking-detail-modal" onClick={e => e.stopPropagation()}>
+                        <div className="booking-detail-modal__header">
+                            <h2>Booking Details</h2>
+                            <button onClick={() => setSelectedBooking(null)}>✕</button>
+                        </div>
+                        <div className="booking-detail-modal__body">
+                            <p><span>Name</span>{selectedBooking.studentName ?? '—'}</p>
+                            <p><span>Student ID</span>{selectedBooking.studentId ?? '—'}</p>
+                            <p><span>Email</span>{selectedBooking.studentEmail ?? '—'}</p>
+                            <p><span>Date</span>{selectedBooking.date}</p>
+                            <p><span>Time</span>{selectedBooking.startTime} – {selectedBooking.endTime}</p>
+                            {selectedBooking.note && (
+                                <div className="booking-detail-modal__note">
+                                    <span>Note</span>
+                                    <p>"{selectedBooking.note}"</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     );
