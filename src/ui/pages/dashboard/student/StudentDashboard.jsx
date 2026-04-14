@@ -4,7 +4,7 @@ import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
 import BookingModal from '../../../components/BookingModal/BookingModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../repo/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, SEND_NOTIFICATION } from '../../../../repo/constants/apiEndpoints';
 import './StudentDashboard.scss';
 
 const BOOKINGS_KEY = 'student_bookings';
@@ -41,6 +41,34 @@ const StudentDashboard = () => {
             .finally(() => setStaffLoading(false));
     }, []);
 
+    // When the bookings tab opens, cross-reference localStorage against the
+    // backend and drop any slots the staff has since cancelled.
+    useEffect(() => {
+        if (activeTab !== 'bookings') return;
+        const current = loadBookings();
+        if (current.length === 0) return;
+
+        const staffIds = [...new Set(current.map(b => b.staffId).filter(Boolean))];
+        Promise.all(
+            staffIds.map(id =>
+                API.get(GET_STAFF_TIMESLOTS(id))
+                    .then(r => ({ id, bookedIds: new Set(r.data.filter(s => s.booked).map(s => s.id)) }))
+                    .catch(() => ({ id, bookedIds: null }))
+            )
+        ).then(results => {
+            const lookup = Object.fromEntries(results.map(r => [r.id, r.bookedIds]));
+            const valid = current.filter(b => {
+                const bookedIds = lookup[b.staffId];
+                return bookedIds === null || bookedIds.has(b.id);
+            });
+            if (valid.length !== current.length) {
+                const sorted = valid.sort((a, b) => new Date(a.date) - new Date(b.date));
+                setBookings(sorted);
+                saveBookings(sorted);
+            }
+        });
+    }, [activeTab]);
+
     const filteredStaff = staff.filter(staff => {
         const term = searchTerm.toLowerCase();
         return (
@@ -73,6 +101,16 @@ const StudentDashboard = () => {
         const updated = [...bookings, newBooking].sort((a, b) => new Date(a.date) - new Date(b.date));
         setBookings(updated);
         saveBookings(updated);
+
+        // Create the conversation so staff can message the student straight away.
+        // The note (or a default message) becomes the first message in the thread.
+        API.post(SEND_NOTIFICATION, {
+            staffId: staff.id,
+            content: note
+                ? `Booking confirmed for ${slot.date} ${slot.startTime}–${slot.endTime}. Note: "${note}"`
+                : `Booking confirmed for ${slot.date} ${slot.startTime}–${slot.endTime}.`,
+        }).catch(err => console.error('SEND_NOTIFICATION failed:', err?.response?.status, err?.response?.data));
+
         setBookingData(null);
         setSelectedStaff(null);
     };
@@ -84,11 +122,10 @@ const StudentDashboard = () => {
         saveBookings(updated);
 
         if (booking?.staffId) {
-            API.post(CREATE_CONVERSATION, { studentId: null, staffId: booking.staffId })
-                .then(r => API.post(SEND_MESSAGE(r.data.id), {
-                    content: `Your booking on ${booking.date} from ${booking.startTime} to ${booking.endTime} has been cancelled by ${currentUser?.sub ?? 'the student'}.`
-                }))
-                .catch(() => {});
+            API.post(SEND_NOTIFICATION, {
+                staffId: booking.staffId,
+                content: `Your booking on ${booking.date} from ${booking.startTime} to ${booking.endTime} has been cancelled by ${currentUser?.sub ?? 'the student'}.`,
+            }).catch(() => {});
         }
     };
 

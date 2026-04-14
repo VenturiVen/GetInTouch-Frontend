@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import API from '../../../infra/api/axios';
 import { GET_CONVERSATIONS, GET_MESSAGES, SEND_MESSAGE } from '../../../repo/constants/apiEndpoints';
 import { useUser } from '../../../service/user/useUser';
@@ -7,7 +6,6 @@ import './MessagesPage.scss';
 
 const MessagesPage = () => {
     const { currentUser } = useUser();
-    const location = useLocation();
     const [conversations, setConversations] = useState([]);
     const [selectedConv, setSelectedConv] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -16,19 +14,9 @@ const MessagesPage = () => {
     const messagesEndRef = useRef(null);
     const pollRef = useRef(null);
 
-    // If navigated here from "Message" button, auto-select that conversation
-    const targetConvId = location.state?.conversationId;
-
     useEffect(() => {
         fetchConversations();
     }, []);
-
-    useEffect(() => {
-        if (conversations.length && targetConvId) {
-            const conv = conversations.find(c => c.id === targetConvId);
-            if (conv) setSelectedConv(conv);
-        }
-    }, [conversations, targetConvId]);
 
     useEffect(() => {
         if (!selectedConv) return;
@@ -43,14 +31,28 @@ const MessagesPage = () => {
 
     const fetchConversations = () => {
         API.get(GET_CONVERSATIONS)
-            .then(r => setConversations(r.data))
+            .then(r => {
+                const data = r.data;
+                const list = Array.isArray(data) ? data
+                    : Array.isArray(data?.content) ? data.content
+                    : Array.isArray(data?.conversations) ? data.conversations
+                    : [];
+                setConversations(list);
+            })
             .catch(() => setConversations([]))
             .finally(() => setLoading(false));
     };
 
     const fetchMessages = (convId) => {
         API.get(GET_MESSAGES(convId))
-            .then(r => setMessages(r.data))
+            .then(r => {
+                const data = r.data;
+                const list = Array.isArray(data) ? data
+                    : Array.isArray(data?.content) ? data.content
+                    : Array.isArray(data?.messages) ? data.messages
+                    : [];
+                setMessages(list);
+            })
             .catch(() => {});
     };
 
@@ -122,7 +124,7 @@ const MessagesPage = () => {
                                         className={`messages-page__bubble ${isMine ? 'messages-page__bubble--mine' : 'messages-page__bubble--theirs'}`}
                                     >
                                         <p>{msg.content}</p>
-                                        <span>{new Date(msg.sentAt).toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
+                                        <span>{new Date(msg.sentAt.endsWith('Z') ? msg.sentAt : msg.sentAt + 'Z').toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
                                     </div>
                                 );
                             })}

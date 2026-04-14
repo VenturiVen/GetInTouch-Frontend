@@ -17,7 +17,10 @@ const StaffAvailabilityModal = ({ staff, onClose, onBook }) => {
         if (!staff) return;
         setLoading(true);
         API.get(GET_STAFF_TIMESLOTS(staff.id))
-            .then(r => setSlots(r.data.filter(s => !s.booked)))
+            .then(r => {
+                const now = new Date();
+                setSlots(r.data.filter(s => !s.booked && new Date(s.endTime) > now));
+            })
             .catch(() => setSlots([]))
             .finally(() => setLoading(false));
     }, [staff]);

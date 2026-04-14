@@ -4,7 +4,9 @@
 .claude
 .txt
 studentpopup.md
-
+report.txt
+report.ipynb
+criteria_A.ipynb
 # Logs
 logs
 *.log

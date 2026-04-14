@@ -119,10 +119,8 @@ const StaffDashboard = () => {
         setSlots(prev => prev.map(s => s.id === slotId ? { ...s, date, startTime, endTime } : s));
     };
 
-    const handleMessage = (booking) => {
-        API.post(CREATE_CONVERSATION, { studentId: booking.studentId })
-            .then(r => navigate('/messages', { state: { conversationId: r.data.id } }))
-            .catch(err => console.error('Failed to create conversation:', err));
+    const handleMessage = () => {
+        navigate('/messages');
     };
 
     const handleDeleteBooked = (slot) => {

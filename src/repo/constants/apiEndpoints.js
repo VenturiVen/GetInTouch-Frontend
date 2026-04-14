@@ -40,6 +40,7 @@ export const CREATE_CONVERSATION = '/api/conversations';
 export const GET_CONVERSATIONS = '/api/conversations';
 export const GET_MESSAGES = (conversationId) => `/api/conversations/${conversationId}/messages`;
 export const SEND_MESSAGE = (conversationId) => `/api/conversations/${conversationId}/messages`;
+export const SEND_NOTIFICATION = '/api/conversations/notify';
 
 // Meetings/Bookings — not yet implemented in backend
 // export const GET_BOOKINGS = '/api/bookings';
