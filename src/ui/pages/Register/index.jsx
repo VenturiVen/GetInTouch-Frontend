@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { registerUserThunk, clearError } from '../../../service/user/userSlice'
+import { registerUserThunk, clearError } from '../../../ui/state/userState'
 
 const Register = () => {
     const dispatch = useDispatch();

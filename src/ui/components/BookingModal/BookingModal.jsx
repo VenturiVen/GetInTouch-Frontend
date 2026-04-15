@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import API from '../../../infra/api/axios';
-import { BOOK_TIMESLOT } from '../../../repo/constants/apiEndpoints';
+import { BOOK_TIMESLOT } from '../../../infra/constants/apiEndpoints';
 import './BookingModal.scss';
 
 const BookingModal = ({ staff, slot, onClose, onConfirm }) => {

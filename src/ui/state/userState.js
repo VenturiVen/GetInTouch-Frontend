@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, getUser } from './userService';
-import { decodeToken, isTokenExpired } from '../../infra/auth/token'
+import { loginUser, registerUser, getUser } from '../../repo/auth/authRepo';
+import { decodeToken, isTokenExpired } from '../../service/auth/token'
 import { storage } from '../../infra/storage/localStorage'
 
 // runs async API call
@@ -57,7 +57,7 @@ if (storedToken && !isTokenExpired(storedToken)) {
     storage.remove('role');
 }
 
-const userSlice = createSlice({
+const userState = createSlice({
     name: 'user',
     initialState: {
         currentUser: storedUser,
@@ -127,5 +127,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { logout, clearError } = userSlice.actions;
-export default userSlice.reducer;
+export const { logout, clearError } = userState.actions;
+export default userState.reducer;

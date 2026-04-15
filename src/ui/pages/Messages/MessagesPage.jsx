@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import API from '../../../infra/api/axios';
-import { GET_CONVERSATIONS, GET_MESSAGES, SEND_MESSAGE } from '../../../repo/constants/apiEndpoints';
-import { useUser } from '../../../service/user/useUser';
+import { GET_CONVERSATIONS, GET_MESSAGES, SEND_MESSAGE } from '../../../infra/constants/apiEndpoints';
+import { useUser } from '../../../service/auth/useUser';
 import './MessagesPage.scss';
 
 const MessagesPage = () => {

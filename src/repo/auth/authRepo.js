@@ -2,7 +2,7 @@ import API from '../../infra/api/axios'
 import { LOGIN,
     REGISTER_STUDENT, REGISTER_STAFF, REGISTER_ADMIN,
     GET_USER_INFO_BY_EMAIL, GET_STUDENT_INFO_BY_ID, GET_STAFF_INFO_BY_ID
-} from '../../repo/constants/apiEndpoints';
+} from '../../infra/constants/apiEndpoints';
 
 export async function loginUser(credentials) {
     const res = await API.post(LOGIN, credentials);

@@ -5,8 +5,8 @@ import BookedSlotCard from '../../../components/BookedSlotCard/BookedSlotCard';
 import CreateSlotModal from '../../../components/CreateSlotModal/CreateSlotModal';
 import EditSlotModal from '../../../components/EditSlotModal/EditSlotModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../repo/constants/apiEndpoints';
-import { useUser } from '../../../../service/user/useUser';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../infra/constants/apiEndpoints';
+import { useUser } from '../../../../service/auth/useUser';
 import './StaffDashboard.scss';
 
 

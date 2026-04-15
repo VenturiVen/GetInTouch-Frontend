@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import API from '../../../infra/api/axios';
-import { GET_STAFF_TIMESLOTS } from '../../../repo/constants/apiEndpoints';
+import { GET_STAFF_TIMESLOTS } from '../../../infra/constants/apiEndpoints';
 import './StaffAvailabilityModal.scss';
 
 const formatDate = (dt) =>

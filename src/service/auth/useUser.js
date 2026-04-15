@@ -1,10 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUserThunk, registerUserThunk, logout, clearError, getUserThunk } from './userSlice';
+import { loginUserThunk, registerUserThunk, logout, clearError, getUserThunk } from '../../ui/state/userState';
 
-// wrapping redux logic inside a React hook for easier calling
-// e.g.,
-// const { login, loading, error } = useUser();
-// login({ email, password });
 export function useUser() {
     const dispatch = useDispatch();
 

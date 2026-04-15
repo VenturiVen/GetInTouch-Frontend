@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useUser } from '../../../../service/user/useUser';
+import { useUser } from '../../../../service/auth/useUser';
 import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
 import BookingModal from '../../../components/BookingModal/BookingModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, SEND_NOTIFICATION } from '../../../../repo/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, SEND_NOTIFICATION } from '../../../../infra/constants/apiEndpoints';
 import './StudentDashboard.scss';
 
 const BOOKINGS_KEY = 'student_bookings';

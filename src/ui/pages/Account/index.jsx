@@ -2,8 +2,7 @@ import './index.scss';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from "../../../service/user/userSlice";
-import { getUserThunk, clearError } from '../../../service/user/userSlice'
+import { logout, getUserThunk, clearError } from "../../../ui/state/userState";
 import { roles } from '../../../repo/constants/role'
 
 import Button from '../../components/Button';

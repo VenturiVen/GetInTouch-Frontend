@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useUser } from '../../../service/user/useUser';
+import { useUser } from '../../../service/auth/useUser';
 
 import './index.scss';
 
