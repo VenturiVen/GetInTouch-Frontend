@@ -1,4 +1,5 @@
 @use '../../../styles/variables' as v;
+@use "sass:color";
 
 .nav-bar {
     position: fixed;
@@ -47,6 +48,7 @@
             &:hover {
                 color: v.$color-text-primary;
                 background-color: v.$color-background-tertiary;
+                transform: translateY(-1px);
             }
 
             &:active {
@@ -69,44 +71,31 @@
         padding-right: 2.5rem;
 
         a {
+            display: inline-block;
             font-weight: 400;
-            font-size: v.$font-size-sm;
+            font-size: 2rem;
             color: v.$color-text-secondary;
             text-decoration: none;
             padding: 0.4rem 0.9rem;
             border-radius: v.$radius-md;
+            letter-spacing: 0.03em;
             transition: background-color v.$transition-fast, color v.$transition-fast;
 
             &:hover {
                 color: v.$color-text-primary;
                 background-color: v.$color-background-tertiary;
+                transform: translateY(-1px);
+            }
+
+            &:active {
+                opacity: 0.8;
             }
 
             &.active {
                 color: v.$color-accent-300;
                 background-color: rgba(v.$color-accent-500, 0.12);
+                font-weight: 500;
             }
-        }
-    }
-
-    .logout-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-weight: 400;
-        font-size: v.$font-size-sm;
-        color: v.$color-error;
-        padding: 0.4rem 0.9rem;
-        border-radius: v.$radius-md;
-        letter-spacing: 0.03em;
-        transition: background-color v.$transition-fast, color v.$transition-fast;
-
-        &:hover {
-            background-color: rgba(v.$color-error, 0.1);
-        }
-
-        &:active {
-            opacity: 0.8;
         }
     }
 }

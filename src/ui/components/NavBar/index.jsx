@@ -35,14 +35,10 @@ const NavBar = () => {
             </nav>
 
             <div className="nav-right">
-                {!token ? (
-                    <NavLink to="/login" className={({ isActive }) => isActive ? "active" : ""}>
-                        Login
+                {token && (
+                    <NavLink to="/account" className={({ isActive }) => isActive ? "active" : ""}>
+                        Account
                     </NavLink>
-                ) : (
-                    <button className="logout-btn" onClick={handleLogout}>
-                        Logout
-                    </button>
                 )}
             </div>
         </div>

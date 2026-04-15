@@ -35,8 +35,8 @@ const MessagesPage = () => {
                 const data = r.data;
                 const list = Array.isArray(data) ? data
                     : Array.isArray(data?.content) ? data.content
-                    : Array.isArray(data?.conversations) ? data.conversations
-                    : [];
+                        : Array.isArray(data?.conversations) ? data.conversations
+                            : [];
                 setConversations(list);
             })
             .catch(() => setConversations([]))
@@ -49,11 +49,11 @@ const MessagesPage = () => {
                 const data = r.data;
                 const list = Array.isArray(data) ? data
                     : Array.isArray(data?.content) ? data.content
-                    : Array.isArray(data?.messages) ? data.messages
-                    : [];
+                        : Array.isArray(data?.messages) ? data.messages
+                            : [];
                 setMessages(list);
             })
-            .catch(() => {});
+            .catch(() => { });
     };
 
     const handleSend = () => {
@@ -63,7 +63,7 @@ const MessagesPage = () => {
                 setInput('');
                 fetchMessages(selectedConv.id);
             })
-            .catch(() => {});
+            .catch(() => { });
     };
 
     const handleKeyDown = (e) => {
@@ -82,67 +82,69 @@ const MessagesPage = () => {
     const getInitials = (name) => name?.split(' ').map(n => n[0]).slice(0, 2).join('') ?? '?';
 
     return (
-        <div className="messages-page">
-            <div className="messages-page__sidebar">
-                <h2 className="messages-page__sidebar-title">Messages</h2>
-                {loading && <p className="messages-page__empty">Loading...</p>}
-                {!loading && conversations.length === 0 && (
-                    <p className="messages-page__empty">No conversations yet.</p>
-                )}
-                {conversations.map(conv => (
-                    <div
-                        key={conv.id}
-                        className={`messages-page__conv-item ${selectedConv?.id === conv.id ? 'messages-page__conv-item--active' : ''}`}
-                        onClick={() => setSelectedConv(conv)}
-                    >
-                        <div className="messages-page__conv-avatar">{getInitials(getOtherName(conv))}</div>
-                        <div className="messages-page__conv-info">
-                            <p className="messages-page__conv-name">{getOtherName(conv)}</p>
+        <div className="container messagePage">
+            <div className="messages-page">
+                <div className="messages-page__sidebar">
+                    <h2 className="messages-page__sidebar-title">Messages</h2>
+                    {loading && <p className="messages-page__empty">Loading...</p>}
+                    {!loading && conversations.length === 0 && (
+                        <p className="messages-page__empty">No conversations yet.</p>
+                    )}
+                    {conversations.map(conv => (
+                        <div
+                            key={conv.id}
+                            className={`messages-page__conv-item ${selectedConv?.id === conv.id ? 'messages-page__conv-item--active' : ''}`}
+                            onClick={() => setSelectedConv(conv)}
+                        >
+                            <div className="messages-page__conv-avatar">{getInitials(getOtherName(conv))}</div>
+                            <div className="messages-page__conv-info">
+                                <p className="messages-page__conv-name">{getOtherName(conv)}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            <div className="messages-page__chat">
-                {!selectedConv ? (
-                    <div className="messages-page__placeholder">
-                        <p>Select a conversation to start chatting</p>
-                    </div>
-                ) : (
-                    <>
-                        <div className="messages-page__chat-header">
-                            <div className="messages-page__conv-avatar">{getInitials(getOtherName(selectedConv))}</div>
-                            <p>{getOtherName(selectedConv)}</p>
+                <div className="messages-page__chat">
+                    {!selectedConv ? (
+                        <div className="messages-page__placeholder">
+                            <p>Select a conversation to start chatting</p>
                         </div>
+                    ) : (
+                        <>
+                            <div className="messages-page__chat-header">
+                                <div className="messages-page__conv-avatar">{getInitials(getOtherName(selectedConv))}</div>
+                                <p>{getOtherName(selectedConv)}</p>
+                            </div>
 
-                        <div className="messages-page__chat-body">
-                            {messages.map(msg => {
-                                const isMine = msg.senderEmail === currentUser?.sub;
-                                return (
-                                    <div
-                                        key={msg.id}
-                                        className={`messages-page__bubble ${isMine ? 'messages-page__bubble--mine' : 'messages-page__bubble--theirs'}`}
-                                    >
-                                        <p>{msg.content}</p>
-                                        <span>{new Date(msg.sentAt.endsWith('Z') ? msg.sentAt : msg.sentAt + 'Z').toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
-                                    </div>
-                                );
-                            })}
-                            <div ref={messagesEndRef} />
-                        </div>
+                            <div className="messages-page__chat-body">
+                                {messages.map(msg => {
+                                    const isMine = msg.senderEmail === currentUser?.sub;
+                                    return (
+                                        <div
+                                            key={msg.id}
+                                            className={`messages-page__bubble ${isMine ? 'messages-page__bubble--mine' : 'messages-page__bubble--theirs'}`}
+                                        >
+                                            <p>{msg.content}</p>
+                                            <span>{new Date(msg.sentAt.endsWith('Z') ? msg.sentAt : msg.sentAt + 'Z').toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
+                                        </div>
+                                    );
+                                })}
+                                <div ref={messagesEndRef} />
+                            </div>
 
-                        <div className="messages-page__chat-input">
-                            <textarea
-                                rows={1}
-                                placeholder="Type a message..."
-                                value={input}
-                                onChange={e => setInput(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                            />
-                            <button onClick={handleSend} disabled={!input.trim()}>Send</button>
-                        </div>
-                    </>
-                )}
+                            <div className="messages-page__chat-input">
+                                <textarea
+                                    rows={1}
+                                    placeholder="Type a message..."
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                />
+                                <button onClick={handleSend} disabled={!input.trim()}>Send</button>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );

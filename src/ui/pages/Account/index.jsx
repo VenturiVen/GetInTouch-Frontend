@@ -8,16 +8,31 @@ import { roles } from '../../../repo/constants/role'
 import Button from '../../components/Button';
 
 const Account = () => {
-    const { token, currentUser } = useSelector((state) => state.user);
+    const { token, currentUser, error } = useSelector((state) => state.user);
 
     const [profile, setProfile] = useState(null);
-
-    const { error } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [formError, setFormError] = useState('');
     const roleName = currentUser?.role?.replace('ROLE_', '');
+
+    const getErrorMessage = (error) => {
+        if (!error) return "";
+
+        switch (error.status) {
+            case 400:
+                return "Invalid request. Please check your input.";
+            case 404:
+                return "Requested resource was not found.";
+            case 500:
+                return "Something went wrong on our side. Please try again.";
+            case 503:
+                return "Service is temporarily unavailable. Try again later.";
+            default:
+                return error.message || "Something went wrong. Please try again.";
+        }
+    };
 
     useEffect(() => {
         const loadUser = async () => {
@@ -39,7 +54,6 @@ const Account = () => {
     return (
         <div className="container account-page">
             <div className="text-zone">
-                <h1>Account</h1>
 
                 <dl className="user-details">
                     <div>
@@ -94,14 +108,16 @@ const Account = () => {
                         </>
                     ) : (
                         <>
-                            <p>Role not found or not known.</p>
+                            <div className="roleError">Role not found or not known.</div>
                         </>
                     )}
                 </dl>
 
-                <p className="error">
-                    {formError || getErrorMessage(error) || ""}
-                </p>
+                {(formError || error) && (
+                    <p className="error">
+                        {formError || getErrorMessage(error)}
+                    </p>
+                )}
 
                 <Button
                     label="Logout"
