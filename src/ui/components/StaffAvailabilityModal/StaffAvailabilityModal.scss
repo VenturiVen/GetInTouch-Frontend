@@ -1,0 +1,127 @@
+.availability-modal {
+    background-color: #1c1f1c;
+    border: 1px solid #262a26;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &__overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 24px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    &__name {
+        font-size: 1.5rem;
+        color: #e6f4ea;
+        margin: 0;
+    }
+
+    &__department {
+        font-size: 0.875rem;
+        color: #b5b5b5;
+        margin: 4px 0 0 0;
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        color: #b5b5b5;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 4px;
+        line-height: 1;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #e6f4ea;
+        }
+    }
+
+    &__subtitle {
+        font-size: 1rem;
+        color: #b5b5b5;
+        margin: 0;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #262a26;
+    }
+
+    &__slots {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__slot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #262a26;
+        border-radius: 8px;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    &__slot-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__slot-date {
+        font-size: 0.875rem;
+        color: #e6f4ea;
+        font-weight: 500;
+    }
+
+    &__slot-time {
+        font-size: 0.875rem;
+        color: #6fdc8c;
+    }
+
+    &__empty {
+        font-size: 0.875rem;
+        color: #b5b5b5;
+        text-align: center;
+        padding: 16px 0;
+        margin: 0;
+    }
+
+    &__book-btn {
+        background-color: #048524;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        white-space: nowrap;
+
+        &:hover {
+            background-color: #03691d;
+        }
+
+        &:active {
+            background-color: #024d15;
+        }
+    }
+}

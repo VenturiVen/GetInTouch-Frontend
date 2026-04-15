@@ -1,0 +1,31 @@
+@use '../../../styles/variables' as v;
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: v.$color-button-primary;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    margin: 1rem;
+
+    font-size: 1rem;
+    font-weight: bold;
+    color: v.$color-button-text;
+    letter-spacing: 0.1rem;
+
+    border: none;
+    cursor: pointer;
+
+    transition: transform v.$transition-fast, background v.$transition-medium;
+
+    &:hover {
+        background: v.$color-button-primary-hover;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}

@@ -1,0 +1,24 @@
+.page {
+    margin-top: 8rem;
+    padding: 1rem;
+}
+
+.container {
+    will-change: opacity, transform;
+    opacity: 0;
+
+    animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transform-style: preserve-3d;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

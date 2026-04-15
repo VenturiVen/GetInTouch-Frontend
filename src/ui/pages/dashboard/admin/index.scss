@@ -1,0 +1,49 @@
+@use '../../../../styles/variables' as v;
+
+.adminDashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .text-zone {
+        top: 10%;
+        left: 15%;
+        right: 15%;
+        position: fixed;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    input {
+        min-width: 220px;
+        max-width: 400px;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .action-select {
+        min-width: 150px;
+        max-width: 400px;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .error {
+        min-height: 25px;
+        max-height: 25px;
+        color: v.$color-error;
+    }
+
+    .success {
+        min-height: 25px;
+        max-height: 25px;
+        color: v.$color-success;
+    }
+
+    .confirm-btn {
+        min-width: 300px;
+        font-size: x-large;
+    }
+}

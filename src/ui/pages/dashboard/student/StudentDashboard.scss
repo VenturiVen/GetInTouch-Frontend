@@ -1,0 +1,163 @@
+.student-dashboard {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 32px;
+        border-bottom: 1px solid #262a26;
+    }
+
+    &__tab {
+        background: none;
+        border: none;
+        color: #b5b5b5;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s ease, border-color 0.2s ease;
+
+        &:hover {
+            color: #e6f4ea;
+        }
+
+        &--active {
+            color: #6fdc8c;
+            border-bottom-color: #6fdc8c;
+        }
+    }
+
+    &__tab-badge {
+        background-color: #03691d;
+        color: #ffffff;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 999px;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    &__title {
+        font-size: 2rem;
+        color: #e6f4ea;
+        margin: 0;
+    }
+
+    &__search {
+        flex: 1;
+        max-width: 400px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #262a26;
+        background-color: #1c1f1c;
+        color: #e6f4ea;
+        font-size: 0.875rem;
+        transition: border-color 0.2s ease;
+
+        &::placeholder {
+            color: #b5b5b5;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: #048524;
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+    }
+
+    &__bookings {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__empty {
+        color: #b5b5b5;
+        font-size: 1rem;
+        text-align: center;
+        margin-top: 32px;
+    }
+}
+
+.booking-card {
+    background-color: #1c1f1c;
+    border: 1px solid #262a26;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__staff {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #e6f4ea;
+        margin: 0;
+    }
+
+    &__department {
+        font-size: 0.875rem;
+        color: #b5b5b5;
+        margin: 0;
+    }
+
+    &__time {
+        font-size: 0.875rem;
+        color: #6fdc8c;
+        margin: 0;
+    }
+
+    &__note {
+        font-size: 0.875rem;
+        color: #b5b5b5;
+        font-style: italic;
+        margin: 4px 0 0 0;
+    }
+
+    &__cancel-btn {
+        background-color: transparent;
+        border: 1px solid #dc2626;
+        color: #dc2626;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        flex-shrink: 0;
+
+        &:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+    }
+}
