@@ -4,7 +4,7 @@ import StaffCard from '../../../components/StaffCard/StaffCard';
 import StaffAvailabilityModal from '../../../components/StaffAvailabilityModal/StaffAvailabilityModal';
 import BookingModal from '../../../components/BookingModal/BookingModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, SEND_NOTIFICATION } from '../../../../infra/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, SEND_NOTIFICATION, FREE_TIMESLOT } from '../../../../infra/constants/apiEndpoints';
 import './StudentDashboard.scss';
 
 const BOOKINGS_KEY = 'student_bookings';
@@ -120,6 +120,9 @@ const StudentDashboard = () => {
         const updated = bookings.filter(b => b.id !== bookingId);
         setBookings(updated);
         saveBookings(updated);
+
+        // Free the slot in the backend so it disappears from staff's booked slots too
+        API.patch(FREE_TIMESLOT(bookingId)).catch(() => {});
 
         if (booking?.staffId) {
             API.post(SEND_NOTIFICATION, {

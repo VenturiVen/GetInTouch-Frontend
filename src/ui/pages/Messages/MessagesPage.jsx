@@ -11,12 +11,23 @@ const MessagesPage = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(true);
+    const [unreadCounts, setUnreadCounts] = useState({});
     const messagesEndRef = useRef(null);
     const pollRef = useRef(null);
+    const lastSeenRef = useRef({});
 
     useEffect(() => {
         fetchConversations();
     }, []);
+
+    // Load last-seen message IDs from localStorage
+    useEffect(() => {
+        if (!currentUser?.sub) return;
+        try {
+            const stored = localStorage.getItem(`msg_seen_${currentUser.sub}`);
+            if (stored) lastSeenRef.current = JSON.parse(stored);
+        } catch {}
+    }, [currentUser?.sub]);
 
     useEffect(() => {
         if (!selectedConv) return;
@@ -24,6 +35,39 @@ const MessagesPage = () => {
         pollRef.current = setInterval(() => fetchMessages(selectedConv.id), 4000);
         return () => clearInterval(pollRef.current);
     }, [selectedConv]);
+
+    // Mark conversation as read when messages load
+    useEffect(() => {
+        if (!selectedConv || messages.length === 0 || !currentUser?.sub) return;
+        const maxId = Math.max(...messages.map(m => m.id));
+        lastSeenRef.current[selectedConv.id] = maxId;
+        localStorage.setItem(`msg_seen_${currentUser.sub}`, JSON.stringify(lastSeenRef.current));
+        setUnreadCounts(prev => ({ ...prev, [selectedConv.id]: 0 }));
+    }, [messages, selectedConv?.id, currentUser?.sub]);
+
+    // Poll unselected conversations for unread counts every 8 seconds
+    useEffect(() => {
+        if (conversations.length === 0 || !currentUser?.sub) return;
+        const checkUnread = () => {
+            conversations.forEach(conv => {
+                if (conv.id === selectedConv?.id) return;
+                API.get(GET_MESSAGES(conv.id))
+                    .then(r => {
+                        const msgs = Array.isArray(r.data) ? r.data
+                            : Array.isArray(r.data?.content) ? r.data.content
+                            : Array.isArray(r.data?.messages) ? r.data.messages
+                            : [];
+                        const lastSeen = lastSeenRef.current[conv.id] || 0;
+                        const unread = msgs.filter(m => m.id > lastSeen && m.senderEmail !== currentUser.sub).length;
+                        setUnreadCounts(prev => ({ ...prev, [conv.id]: unread }));
+                    })
+                    .catch(() => {});
+            });
+        };
+        checkUnread();
+        const interval = setInterval(checkUnread, 8000);
+        return () => clearInterval(interval);
+    }, [conversations, selectedConv?.id, currentUser?.sub]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -100,6 +144,9 @@ const MessagesPage = () => {
                             <div className="messages-page__conv-info">
                                 <p className="messages-page__conv-name">{getOtherName(conv)}</p>
                             </div>
+                            {unreadCounts[conv.id] > 0 && (
+                                <span className="messages-page__unread-badge">{unreadCounts[conv.id]}</span>
+                            )}
                         </div>
                     ))}
                 </div>

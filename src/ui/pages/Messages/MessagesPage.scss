@@ -64,6 +64,22 @@
 
     &__conv-info {
         overflow: hidden;
+        flex: 1;
+    }
+
+    &__unread-badge {
+        background-color: v.$color-accent-500;
+        color: #fff;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        min-width: 1.2rem;
+        height: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 0.3rem;
+        flex-shrink: 0;
     }
 
     &__conv-name {

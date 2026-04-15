@@ -5,7 +5,7 @@ import BookedSlotCard from '../../../components/BookedSlotCard/BookedSlotCard';
 import CreateSlotModal from '../../../components/CreateSlotModal/CreateSlotModal';
 import EditSlotModal from '../../../components/EditSlotModal/EditSlotModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, CREATE_CONVERSATION, SEND_MESSAGE } from '../../../../infra/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, FREE_TIMESLOT, GET_CONVERSATIONS, SEND_MESSAGE } from '../../../../infra/constants/apiEndpoints';
 import { useUser } from '../../../../service/auth/useUser';
 import './StaffDashboard.scss';
 
@@ -72,23 +72,6 @@ const StaffDashboard = () => {
         refreshSlots(staffId);
     }, [staffId]);
 
-    // Auto-remove expired slots every 30 seconds
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const now = new Date();
-            setSlots(prev => {
-                const expired = prev.filter(s => new Date(s.rawStartTime) <= now);
-                expired.forEach(s => API.delete(DELETE_AVAILABILITY(s.availabilityId)).catch(() => {}));
-                return prev.filter(s => new Date(s.rawStartTime) > now);
-            });
-            setBookedSlots(prev => {
-                const expired = prev.filter(s => new Date(s.rawEndTime) <= now);
-                expired.forEach(s => API.delete(DELETE_AVAILABILITY(s.availabilityId)).catch(() => {}));
-                return prev.filter(s => new Date(s.rawEndTime) > now);
-            });
-        }, 30000);
-        return () => clearInterval(interval);
-    }, []);
 
     const handleCreate = ({ date, startTime, endTime }) => {
         if (!staffId) return;
@@ -124,14 +107,23 @@ const StaffDashboard = () => {
     };
 
     const handleDeleteBooked = (slot) => {
-        API.delete(DELETE_AVAILABILITY(slot.availabilityId))
+        API.patch(FREE_TIMESLOT(slot.id))
             .then(() => {
                 setBookedSlots(prev => prev.filter(s => s.id !== slot.id));
-                if (slot.studentId) {
-                    API.post(CREATE_CONVERSATION, { studentId: slot.studentId })
-                        .then(r => API.post(SEND_MESSAGE(r.data.id), {
-                            content: `Your booking on ${slot.date} from ${slot.startTime} to ${slot.endTime} has been cancelled by ${staffName || currentUser?.sub}.`
-                        }))
+                if (slot.studentEmail) {
+                    API.get(GET_CONVERSATIONS)
+                        .then(r => {
+                            const list = Array.isArray(r.data) ? r.data
+                                : Array.isArray(r.data?.content) ? r.data.content
+                                : Array.isArray(r.data?.conversations) ? r.data.conversations
+                                : [];
+                            const conv = list.find(c => c.studentEmail === slot.studentEmail);
+                            if (conv) {
+                                API.post(SEND_MESSAGE(conv.id), {
+                                    content: `Your booking on ${slot.date} from ${slot.startTime} to ${slot.endTime} has been cancelled by ${staffName || currentUser?.sub}.`,
+                                }).catch(() => {});
+                            }
+                        })
                         .catch(() => {});
                 }
             })
