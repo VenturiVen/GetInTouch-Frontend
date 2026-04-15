@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as v;
+
+.alert {
+    padding: 1rem;
+    background-color: v.$color-background-secondary;
+    width: 100%;
+    max-width: 600px;
+    margin: 5rem auto;
+    border-radius: v.$radius-lg;
+    box-sizing: border-box;
+}
+
+.alertContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem;
+}
+
+.ErrorWarning {
+    color: v.$color-error;
+}
+
+button {
+    padding: 0.5rem 2rem;
+    margin-top: 2rem;
+    border-radius: v.$radius-sm;
+}
