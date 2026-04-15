@@ -17,10 +17,10 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 [Raid Mouras](https://github.com/RaidMouras) | Frontend
 
 ## Deploy Container for both Frontend and Backend
-# Pre-Requisites
+### Pre-Requisites
 - Clone both Frontend and Backend Repositories into one folder (e.g., 'Dev/Frontend', 'Dev/Backend')
 
-# Setup
+### Setup
 1. Open Docker if not already open
 2. In /GetInTouch-Backend, view the Docker-compose.yml file for a list of Docker commands
 3. Change terminal directory to /GetInTouch-Backend (e.g., run: cd GetInTouch-Backend)
@@ -28,10 +28,10 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 5. After completion, project will have been built, the project container and images should be running inside Docker
 
 ## Frontend Dev Environment Setup
-# Pre-Requisites
+### Pre-Requisites
 - Clone Frontend repository
 
-# Run Frontend Development Environment
+### Run Frontend Development Environment
 1. Change terminal directory to /GetInTouch-Frontend (e.g., run: cd GetInTouch-Frontend)
 2. Create a .env file with a constant called 'VITE_BACKEND_URL' and set it to the backend's url (e.g., 'VITE_BACKEND_URL=http://localhost:8080')
 3. Run 'npm install'
