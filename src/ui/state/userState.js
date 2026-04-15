@@ -1,9 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, getUser } from '../../repo/auth/authRepo';
+import { loginUser, registerUser, getUser, deleteUser } from '../../repo/auth/authRepo';
 import { decodeToken, isTokenExpired } from '../../service/auth/token'
 import { storage } from '../../infra/storage/localStorage'
 
-// runs async API call
 export const loginUserThunk = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
     try {
         const data = await loginUser(credentials);
@@ -18,12 +17,13 @@ export const loginUserThunk = createAsyncThunk('user/login', async (credentials,
 
 export const registerUserThunk = createAsyncThunk('user/register', async ({ role, credentials }, { rejectWithValue }) => {
     try {
+        console.log(credentials);
         const data = await registerUser(role, credentials);
         return data;
     } catch (error) {
         return rejectWithValue({
             status: error?.response?.status,
-            message: error?.response?.data || error.message || 'Login Failed'
+            message: error?.response?.data || error.message || 'Registration Failed'
         });
     }
 });
@@ -33,11 +33,28 @@ export const getUserThunk = createAsyncThunk('user/email', async (_, { rejectWit
         const decoded = decodeToken(storage.get('token'));
         const email = decoded?.sub;
         const role = decoded?.role?.replace('ROLE_', '');
+        if (role === 'ADMIN') {
+            return;
+        }
         const data = await getUser(role, email);
         return data;
-    } catch (error) {return rejectWithValue({
+    } catch (error) {
+        return rejectWithValue({
             status: error?.response?.status,
-            message: error?.response?.data || error.message || 'Login Failed'
+            message: error?.response?.data || error.message || 'Action Failed'
+        });
+    }
+});
+
+export const deleteUserThunk = createAsyncThunk('user/delete', async ({ email }, { rejectWithValue }) => {
+    try {
+        console.log(email);
+        const data = await deleteUser(email)
+        return data;
+    } catch (error) {
+        return rejectWithValue({
+            status: error?.response?.status,
+            message: error?.response?.data || error.message || 'Action Failed'
         });
     }
 });

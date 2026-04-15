@@ -55,7 +55,7 @@ const Register = () => {
     const [officeLocation, setOfficeLocation] = useState('');
 
     // admin
-    const [adminCode, setAdminCode] = useState('');
+    const [adminSecret, setAdminSecret] = useState('');
 
     const handleRegisterClick = async () => {
         dispatch(clearError());
@@ -69,7 +69,7 @@ const Register = () => {
         let resultAction;
 
         if (role === "ADMIN") {
-            if (!adminCode) {
+            if (!adminSecret) {
                 setFormError("Please fill in all fields.");
                 return;
             }
@@ -79,7 +79,7 @@ const Register = () => {
                     name: name,
                     password: password,
                     email: email,
-                    adminCode: adminCode
+                    adminSecret: adminSecret
                 }
             }));
         }
@@ -201,9 +201,9 @@ const Register = () => {
                         <>
                             <input
                                 type="text"
-                                placeholder="Enter Admin Code"
-                                value={adminCode}
-                                onChange={(e) => setAdminCode(e.target.value)}
+                                placeholder="Enter Admin Secret"
+                                value={adminSecret}
+                                onChange={(e) => setAdminSecret(e.target.value)}
                             /> <br />
                         </>
                     )}

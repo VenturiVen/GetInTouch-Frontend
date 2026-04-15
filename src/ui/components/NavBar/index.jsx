@@ -1,16 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from '../../../service/auth/useUser';
+import { decodeToken } from '../../../service/auth/token';
+import { storage } from '../../../infra/storage/localStorage';
 
 import './index.scss';
 
 const NavBar = () => {
-    const { token, logout } = useUser();
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+    const { token } = useUser();
 
     return (
         <div className="nav-bar">
@@ -27,7 +23,7 @@ const NavBar = () => {
                         Dashboard
                     </NavLink>
                 )}
-                {token && (
+                {(token && ((decodeToken(storage.get('token'))).role?.replace('ROLE_', '')) != "ADMIN" ) && (
                     <NavLink to="/messages" className={({ isActive }) => isActive ? "active" : ""}>
                         Messages
                     </NavLink>

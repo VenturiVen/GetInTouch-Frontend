@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUserThunk, registerUserThunk, logout, clearError, getUserThunk } from '../../ui/state/userState';
+import { loginUserThunk, registerUserThunk, logout, clearError, getUserThunk, deleteUserThunk } from '../../ui/state/userState';
 
 export function useUser() {
     const dispatch = useDispatch();
@@ -28,6 +28,10 @@ export function useUser() {
         dispatch(clearError());
     };
 
+    const handleDeleteUser = () => {
+        dispatch(deleteUserThunk())
+    }
+
     return {
         currentUser,
         token,
@@ -40,5 +44,6 @@ export function useUser() {
         getUser: handleGetUser,
         logout: handleLogout,
         clearError: handleClearError,
+        delete: handleDeleteUser
     };
 }

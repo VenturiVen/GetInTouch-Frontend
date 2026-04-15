@@ -13,6 +13,7 @@ export const GET_DEPARTMENT_STAFF = (department) => `/api/staff/department/${dep
 // Users
 export const GET_USER_INFO_BY_EMAIL = (email) => `/api/user/email/${encodeURIComponent(email)}`;
 export const GET_USER_INFO_BY_ID = (id) => `/api/user/id/${id}`;
+export const DELETE_USER = (id) => `/api/user/delete/${id}`;
 
 // 'me'
 export const GET_STAFF_INFO_BY_ID = (id) => `/api/staff/me/${id}`;
