@@ -66,6 +66,10 @@ const Register = () => {
             return;
         }
 
+        if (!email.includes('@')) {
+            setFormError("Email field must include @.");
+        }
+
         let resultAction;
 
         if (role === "ADMIN") {
