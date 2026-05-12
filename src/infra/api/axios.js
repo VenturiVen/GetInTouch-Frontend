@@ -2,7 +2,7 @@ import axios from 'axios';
 import { storage } from '../storage/localStorage';
 
 const API = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL,
+    baseURL: '/',
 });
 
 API.interceptors.request.use((config) => {
