@@ -27,7 +27,7 @@ const Register = () => {
             case 404:
                 return "Service not found.";
             case 409:
-                return "User already exists (email or username).";
+                return "User with this email already exists.";
             case 422:
                 return "Invalid input. Please check your details.";
             case 500:
