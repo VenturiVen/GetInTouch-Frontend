@@ -66,8 +66,10 @@ const Register = () => {
             return;
         }
 
-        if (!email.includes('@')) {
-            setFormError("Email field must include @.");
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            setFormError("Please enter a valid email address.");
+            return;
         }
 
         let resultAction;
