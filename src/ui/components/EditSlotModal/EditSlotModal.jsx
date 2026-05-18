@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './EditSlotModal.scss';
 
 const EditSlotModal = ({ slot, onClose, onEdit }) => {
-    const [date, setDate] = useState(slot.date);
+    const [date, setDate] = useState(slot.rawStartTime ? slot.rawStartTime.split('T')[0] : '');
     const [startTime, setStartTime] = useState(slot.startTime);
     const [endTime, setEndTime] = useState(slot.endTime);
 
