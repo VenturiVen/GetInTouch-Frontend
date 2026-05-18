@@ -2,7 +2,7 @@
 
 Visit the [wiki page](https://github.com/VenturiVen/GetInTouch-Frontend/wiki) to see documentation.
 
-Visit the [backend repository](https://github.com/AronCalvert/CS4135-Software-Architecture).
+Visit the [backend repository](https://github.com/AronCalvert/CS4135-Software-Architecture) and [infra repository](https://github.com/AronCalvert/GetInTouch-infra).
 
 ## About
 Get In Touch is a project created for CS4135 Software Architecture in the University of Limerick. We created it with the aim to make it easier for students to contact people in the university, such as lecturers, staff, and student officers. This repository includes the frontend app and backend server, visit the [frontend wiki]([https://github.com/AronCalvert/CS4135-Software-Architecture/wiki/Frontend-Documentation](https://github.com/VenturiVen/GetInTouch-Frontend/wiki/Frontend-Documentation)) and [backend wiki](https://github.com/AronCalvert/CS4135-Software-Architecture/wiki/Backend-Documentation) pages to find out more!
@@ -18,7 +18,7 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 
 ## Deploy Container for both Frontend and Backend
 ### Pre-Requisites
-- Clone both Frontend and Backend Repositories into one folder (e.g., 'Dev/Frontend', 'Dev/Backend')
+- Clone the Frontend, Backend, and Infra Repositories into one folder (e.g., 'Dev/Frontend', 'Dev/Backend')
 
 ### Setup
 1. Open Docker if not already open
@@ -30,6 +30,7 @@ Get In Touch is a project created for CS4135 Software Architecture in the Univer
 ## Frontend Dev Environment Setup
 ### Pre-Requisites
 - Clone Frontend repository
+- Clone Infra repository
 
 ### Run Frontend Development Environment
 1. Change terminal directory to /GetInTouch-Frontend (e.g., run: cd GetInTouch-Frontend)
