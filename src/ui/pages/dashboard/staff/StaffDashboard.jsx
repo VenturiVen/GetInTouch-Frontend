@@ -5,7 +5,7 @@ import BookedSlotCard from '../../../components/BookedSlotCard/BookedSlotCard';
 import CreateSlotModal from '../../../components/CreateSlotModal/CreateSlotModal';
 import EditSlotModal from '../../../components/EditSlotModal/EditSlotModal';
 import API from '../../../../infra/api/axios';
-import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_AVAILABILITY, FREE_TIMESLOT, GET_CONVERSATIONS, SEND_MESSAGE } from '../../../../infra/constants/apiEndpoints';
+import { GET_ALL_STAFF, GET_STAFF_TIMESLOTS, CREATE_AVAILABILITY, DELETE_TIMESLOT, FREE_TIMESLOT, GET_CONVERSATIONS, SEND_MESSAGE } from '../../../../infra/constants/apiEndpoints';
 import { useUser } from '../../../../service/auth/useUser';
 import './StaffDashboard.scss';
 
@@ -100,9 +100,9 @@ const StaffDashboard = () => {
     };
 
     const handleDelete = (slot) => {
-        API.delete(DELETE_AVAILABILITY(slot.availabilityId))
-            .then(() => setSlots(prev => prev.filter(s => s.availabilityId !== slot.availabilityId)))
-            .catch(err => console.error('Failed to delete availability:', err));
+        API.delete(DELETE_TIMESLOT(slot.id))
+            .then(() => setSlots(prev => prev.filter(s => s.id !== slot.id)))
+            .catch(err => console.error('Failed to delete timeslot:', err));
     };
 
     const handleEdit = (slotId, { date, startTime, endTime }) => {

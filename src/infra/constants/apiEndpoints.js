@@ -35,6 +35,7 @@ export const DELETE_AVAILABILITY = (id) => `/api/Availability/${id}`;
 export const GET_STAFF_TIMESLOTS = (staffId) => `/api/timeslots/staff/${staffId}`;
 export const BOOK_TIMESLOT = (slotId) => `/api/timeslots/book/${slotId}`;
 export const FREE_TIMESLOT = (slotId) => `/api/timeslots/free/${slotId}`;
+export const DELETE_TIMESLOT = (slotId) => `/api/timeslots/${slotId}`;
 
 // Conversations & Messages
 export const CREATE_CONVERSATION = '/api/conversations';
