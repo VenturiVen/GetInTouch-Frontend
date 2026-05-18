@@ -41,6 +41,7 @@ const StaffDashboard = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
     const [selectedBooking, setSelectedBooking] = useState(null);
+    const [notification, setNotification] = useState('');
 
     // Step 1: find the logged-in staff member's ID by matching email from JWT
     useEffect(() => {
@@ -87,7 +88,14 @@ const StaffDashboard = () => {
             endDate: date,
             timeSlotLength: 'PT30M',
         }])
-            .then(() => refreshSlots())
+            .then(() => {
+                refreshSlots();
+                const [startH, startM] = startTime.split(':').map(Number);
+                const [endH, endM] = endTime.split(':').map(Number);
+                const slotCount = Math.floor(((endH * 60 + endM) - (startH * 60 + startM)) / 30);
+                setNotification(`Your availability has been split into ${slotCount} slot${slotCount !== 1 ? 's' : ''} of 30 minutes.`);
+                setTimeout(() => setNotification(''), 5000);
+            })
             .catch(err => console.error('Failed to create availability:', err));
     };
 
@@ -133,7 +141,11 @@ const StaffDashboard = () => {
     return (
         <>
             <div className="container staff-dashboard">
-                <div className="staff-dashboard__tabs">
+                {notification && (
+                <div className="staff-dashboard__notification">{notification}</div>
+            )}
+
+            <div className="staff-dashboard__tabs">
                     <button
                         className={`staff-dashboard__tab ${activeTab === 'available' ? 'staff-dashboard__tab--active' : ''}`}
                         onClick={() => setActiveTab('available')}
